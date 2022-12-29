@@ -1,3 +1,3 @@
-# Terraform module for Azure Foobar
+# Terraform module for Azure Network
 
-Terraform module which creates Azure Foobar resources.
+Terraform module which creates Azure Network resources.
