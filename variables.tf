@@ -24,6 +24,7 @@ variable "subnets" {
   type = map(object({
     name             = string
     address_prefixes = list(string)
+    route_table_id   = optional(string) # The ID of the route table to be associated with this subnet.
   }))
 
   default = {}
