@@ -18,12 +18,12 @@ module "network" {
   vnet_name           = "vnet-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  address_spaces      = ["10.0.0.0/8"]
+  address_spaces      = ["10.0.0.0/16"]
 
   subnets = {
     "vm" = {
       name             = "snet-vm-${random_id.this.hex}"
-      address_prefixes = ["10.10.0.0/24"]
+      address_prefixes = ["10.0.1.0/24"]
     }
   }
 }
