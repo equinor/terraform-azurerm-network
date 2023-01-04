@@ -1,10 +1,6 @@
 locals {
-  # Create map of subnet route table associations
   subnet_route_table_associations = {
-    for k, v in var.subnets : k => {
-      subnet_id      = azurerm_subnet.this[k].id
-      route_table_id = v.route_table_id
-    } if v.route_table_id != null
+    for k, v in var.subnets : k => v["route_table_id"] if v.route_table_id != null
   }
 }
 
@@ -29,6 +25,6 @@ resource "azurerm_subnet" "this" {
 resource "azurerm_subnet_route_table_association" "this" {
   for_each = local.subnet_route_table_associations
 
-  subnet_id      = each.value["subnet_id"]
-  route_table_id = each.value["route_table_id"]
+  subnet_id      = azurerm_subnet.this[each.key].id
+  route_table_id = each.value
 }
