@@ -40,13 +40,19 @@ module "network" {
     "vm" = {
       name             = "snet-vm-${random_id.this.hex}"
       address_prefixes = ["10.0.1.0/24"]
-      route_table_id   = azurerm_route_table.this.id
+
+      route_table_association = {
+        route_table_id = azurerm_route_table.this.id
+      }
     }
 
     "sql" = {
       name             = "snet-sql-${random_id.this.hex}"
       address_prefixes = ["10.0.2.0/24"]
-      route_table_id   = azurerm_route_table.this.id
+
+      route_table_association = {
+        route_table_id = azurerm_route_table.this.id
+      }
     }
 
     "storage" = {

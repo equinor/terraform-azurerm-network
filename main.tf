@@ -1,6 +1,6 @@
 locals {
   subnet_route_table_associations = {
-    for k, v in var.subnets : k => v["route_table_id"] if v.route_table_id != null
+    for k, v in var.subnets : k => v["route_table_association"].route_table_id if v["route_table_association"] != null
   }
 }
 
