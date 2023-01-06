@@ -24,6 +24,12 @@ resource "azurerm_virtual_network" "remote" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   address_space       = ["10.0.0.0/16"]
+}
+
+resource "azurerm_network_security_group" "this" {
+  name                = "nsg-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
 
   tags = local.tags
 }
@@ -49,6 +55,10 @@ module "network" {
     "vm" = {
       name             = "snet-vm-${random_id.this.hex}"
       address_prefixes = ["10.1.1.0/24"]
+
+      network_security_group_association = {
+        network_security_group_id = azurerm_network_security_group.this.id
+      }
 
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
