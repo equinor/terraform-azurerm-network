@@ -33,6 +33,17 @@ variable "subnets" {
   default = {}
 }
 
+variable "virtual_network_peerings" {
+  description = "A map of virtual network peerings to create for this virtual network."
+
+  type = map(object({
+    name                      = string
+    remote_virtual_network_id = string
+  }))
+
+  default = {}
+}
+
 variable "tags" {
   description = "A map of tags to assign to the resources."
   type        = map(string)

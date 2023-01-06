@@ -19,6 +19,15 @@ resource "azurerm_resource_group" "this" {
   tags = local.tags
 }
 
+resource "azurerm_virtual_network" "remote" {
+  name                = "vnet-${random_id.this.hex}-remote"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  address_space       = ["10.0.0.0/16"]
+
+  tags = local.tags
+}
+
 resource "azurerm_route_table" "this" {
   name                = "rt-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
@@ -34,12 +43,12 @@ module "network" {
   vnet_name           = "vnet-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  address_spaces      = ["10.0.0.0/16"]
+  address_spaces      = ["10.1.0.0/16"]
 
   subnets = {
     "vm" = {
       name             = "snet-vm-${random_id.this.hex}"
-      address_prefixes = ["10.0.1.0/24"]
+      address_prefixes = ["10.1.1.0/24"]
 
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
@@ -48,7 +57,7 @@ module "network" {
 
     "sql" = {
       name             = "snet-sql-${random_id.this.hex}"
-      address_prefixes = ["10.0.2.0/24"]
+      address_prefixes = ["10.1.2.0/24"]
 
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
@@ -57,7 +66,14 @@ module "network" {
 
     "storage" = {
       name             = "snet-storage-${random_id.this.hex}"
-      address_prefixes = ["10.0.3.0/24"]
+      address_prefixes = ["10.1.3.0/24"]
+    }
+  }
+
+  virtual_network_peerings = {
+    "remote" = {
+      name                      = "peer-${random_id.this.hex}"
+      remote_virtual_network_id = azurerm_virtual_network.remote.id
     }
   }
 
