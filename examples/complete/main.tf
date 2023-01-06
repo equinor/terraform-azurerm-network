@@ -19,15 +19,6 @@ resource "azurerm_resource_group" "this" {
   tags = local.tags
 }
 
-resource "azurerm_virtual_network" "hub" {
-  name                = "vnet-hub-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  address_space       = ["10.0.0.0/16"]
-
-  tags = local.tags
-}
-
 resource "azurerm_network_security_group" "this" {
   name                = "nsg-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
@@ -44,6 +35,40 @@ resource "azurerm_route_table" "this" {
   tags = local.tags
 }
 
+module "network_hub" {
+  # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
+  source = "../.."
+
+  vnet_name           = "vnet-hub-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  address_spaces      = ["10.0.0.0/16"]
+
+  subnets = {
+    "this" = {
+      name             = "snet-${random_id.this.hex}"
+      address_prefixes = ["10.0.1.0/24"]
+
+      network_security_group_association = {
+        network_security_group_id = azurerm_network_security_group.this.id
+      }
+
+      route_table_association = {
+        route_table_id = azurerm_route_table.this.id
+      }
+    }
+  }
+
+  virtual_network_peerings = {
+    "this" = {
+      name                      = "peer-${random_id.this.hex}"
+      remote_virtual_network_id = module.network.vnet_id
+    }
+  }
+
+  tags = local.tags
+}
+
 module "network" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
@@ -54,8 +79,8 @@ module "network" {
   address_spaces      = ["10.1.0.0/16"]
 
   subnets = {
-    "vm" = {
-      name             = "snet-vm-${random_id.this.hex}"
+    "this" = {
+      name             = "snet-${random_id.this.hex}"
       address_prefixes = ["10.1.1.0/24"]
 
       network_security_group_association = {
@@ -69,9 +94,9 @@ module "network" {
   }
 
   virtual_network_peerings = {
-    "hub" = {
+    "this" = {
       name                      = "peer-${random_id.this.hex}"
-      remote_virtual_network_id = azurerm_virtual_network.hub.id
+      remote_virtual_network_id = module.network_hub.vnet_id
     }
   }
 
