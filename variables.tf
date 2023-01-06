@@ -47,8 +47,10 @@ variable "virtual_network_peerings" {
   description = "A map of virtual network peerings to create for this virtual network."
 
   type = map(object({
-    name                      = string
-    remote_virtual_network_id = string
+    name                          = string
+    remote_virtual_network_id     = string
+    override_virtual_network_name = optional(string)
+    override_resource_group_name  = optional(string)
   }))
 
   default = {}

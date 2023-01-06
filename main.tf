@@ -45,7 +45,7 @@ resource "azurerm_virtual_network_peering" "this" {
   for_each = var.virtual_network_peerings
 
   name                      = each.value["name"]
-  resource_group_name       = var.resource_group_name
-  virtual_network_name      = azurerm_virtual_network.this.name
+  resource_group_name       = coalesce(each.value["override_resource_group_name"], var.resource_group_name)
+  virtual_network_name      = coalesce(each.value["override_virtual_network_name"], azurerm_virtual_network.this.name)
   remote_virtual_network_id = each.value["remote_virtual_network_id"]
 }
