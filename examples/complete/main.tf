@@ -35,18 +35,18 @@ resource "azurerm_route_table" "this" {
   tags = local.tags
 }
 
-module "network" {
+module "network_hub" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
 
-  vnet_name           = "vnet-${random_id.this.hex}"
+  vnet_name           = "vnet-hub-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   address_spaces      = ["10.0.0.0/16"]
 
   subnets = {
-    "vm" = {
-      name             = "snet-vm-${random_id.this.hex}"
+    "this" = {
+      name             = "snet-${random_id.this.hex}"
       address_prefixes = ["10.0.1.0/24"]
 
       network_security_group_association = {
@@ -57,19 +57,46 @@ module "network" {
         route_table_id = azurerm_route_table.this.id
       }
     }
+  }
 
-    "sql" = {
-      name             = "snet-sql-${random_id.this.hex}"
-      address_prefixes = ["10.0.2.0/24"]
+  virtual_network_peerings = {
+    "this" = {
+      name                      = "peer-${random_id.this.hex}"
+      remote_virtual_network_id = module.network.vnet_id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "network" {
+  # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
+  source = "../.."
+
+  vnet_name           = "vnet-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  address_spaces      = ["10.1.0.0/16"]
+
+  subnets = {
+    "this" = {
+      name             = "snet-${random_id.this.hex}"
+      address_prefixes = ["10.1.1.0/24"]
+
+      network_security_group_association = {
+        network_security_group_id = azurerm_network_security_group.this.id
+      }
 
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
       }
     }
+  }
 
-    "storage" = {
-      name             = "snet-storage-${random_id.this.hex}"
-      address_prefixes = ["10.0.3.0/24"]
+  virtual_network_peerings = {
+    "this" = {
+      name                      = "peer-${random_id.this.hex}"
+      remote_virtual_network_id = module.network_hub.vnet_id
     }
   }
 

@@ -39,3 +39,12 @@ resource "azurerm_subnet_route_table_association" "this" {
   subnet_id      = azurerm_subnet.this[each.key].id
   route_table_id = each.value
 }
+
+resource "azurerm_virtual_network_peering" "this" {
+  for_each = var.virtual_network_peerings
+
+  name                      = each.value["name"]
+  resource_group_name       = var.resource_group_name
+  virtual_network_name      = azurerm_virtual_network.this.name
+  remote_virtual_network_id = each.value["remote_virtual_network_id"]
+}

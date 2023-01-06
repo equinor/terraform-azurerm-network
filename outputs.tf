@@ -21,3 +21,17 @@ output "subnet_names" {
     for k, v in azurerm_subnet.this : k => v.name
   }
 }
+
+output "virtual_network_peering_names" {
+  description = "A map of virtual network peering names."
+  value = {
+    for k, v in azurerm_virtual_network_peering.this : k => v.name
+  }
+}
+
+output "virtual_network_peering_ids" {
+  description = "A map of virtual network peering IDs."
+  value = {
+    for k, v in azurerm_virtual_network_peering.this : k => v.id
+  }
+}
