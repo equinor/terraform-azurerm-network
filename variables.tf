@@ -18,6 +18,12 @@ variable "address_spaces" {
   type        = list(string)
 }
 
+variable "dns_servers" {
+  description = "A list of DNS servers to use for this virtual network."
+  type        = list(string)
+  default     = []
+}
+
 variable "subnets" {
   description = "A map of subnets to create for this virtual network."
 
