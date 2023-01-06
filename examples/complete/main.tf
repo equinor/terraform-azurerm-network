@@ -43,6 +43,7 @@ module "network_hub" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   address_spaces      = ["10.0.0.0/16"]
+  dns_servers         = ["10.0.0.4", "10.0.0.5"]
 
   subnets = {
     "this" = {
