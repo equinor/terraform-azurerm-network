@@ -24,6 +24,10 @@ variable "subnets" {
   type = map(object({
     name             = string
     address_prefixes = list(string)
+
+    route_table_association = optional(object({
+      route_table_id = string
+    }))
   }))
 
   default = {}

@@ -1,3 +1,9 @@
+locals {
+  subnet_route_table_associations = {
+    for k, v in var.subnets : k => v["route_table_association"].route_table_id if v["route_table_association"] != null
+  }
+}
+
 resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
@@ -14,4 +20,11 @@ resource "azurerm_subnet" "this" {
   resource_group_name  = azurerm_virtual_network.this.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = each.value["address_prefixes"]
+}
+
+resource "azurerm_subnet_route_table_association" "this" {
+  for_each = local.subnet_route_table_associations
+
+  subnet_id      = azurerm_subnet.this[each.key].id
+  route_table_id = each.value
 }
