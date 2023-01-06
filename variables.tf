@@ -25,6 +25,10 @@ variable "subnets" {
     name             = string
     address_prefixes = list(string)
 
+    network_security_group_association = optional(object({
+      network_security_group_id = string
+    }))
+
     route_table_association = optional(object({
       route_table_id = string
     }))
