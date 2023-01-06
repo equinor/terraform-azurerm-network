@@ -19,8 +19,8 @@ resource "azurerm_resource_group" "this" {
   tags = local.tags
 }
 
-resource "azurerm_virtual_network" "remote" {
-  name                = "vnet-${random_id.this.hex}-remote"
+resource "azurerm_virtual_network" "hub" {
+  name                = "vnet-hub-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   address_space       = ["10.0.0.0/16"]
@@ -64,26 +64,12 @@ module "network" {
         route_table_id = azurerm_route_table.this.id
       }
     }
-
-    "sql" = {
-      name             = "snet-sql-${random_id.this.hex}"
-      address_prefixes = ["10.1.2.0/24"]
-
-      route_table_association = {
-        route_table_id = azurerm_route_table.this.id
-      }
-    }
-
-    "storage" = {
-      name             = "snet-storage-${random_id.this.hex}"
-      address_prefixes = ["10.1.3.0/24"]
-    }
   }
 
   virtual_network_peerings = {
-    "remote" = {
+    "hub" = {
       name                      = "peer-${random_id.this.hex}"
-      remote_virtual_network_id = azurerm_virtual_network.remote.id
+      remote_virtual_network_id = azurerm_virtual_network.hub.id
     }
   }
 
