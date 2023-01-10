@@ -30,7 +30,7 @@ variable "subnets" {
   type = map(object({
     name              = string
     address_prefixes  = list(string)
-    service_endpoints = optional(list(string))
+    service_endpoints = optional(list(string), [])
 
     network_security_group_association = optional(object({
       network_security_group_id = string
