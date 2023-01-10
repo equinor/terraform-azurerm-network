@@ -28,8 +28,9 @@ variable "subnets" {
   description = "A map of subnets to create for this virtual network."
 
   type = map(object({
-    name             = string
-    address_prefixes = list(string)
+    name              = string
+    address_prefixes  = list(string)
+    service_endpoints = optional(list(string), [])
 
     network_security_group_association = optional(object({
       network_security_group_id = string

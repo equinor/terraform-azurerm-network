@@ -81,8 +81,9 @@ module "network" {
 
   subnets = {
     "this" = {
-      name             = "snet-${random_id.this.hex}"
-      address_prefixes = ["10.1.1.0/24"]
+      name              = "snet-${random_id.this.hex}"
+      address_prefixes  = ["10.1.1.0/24"]
+      service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
 
       network_security_group_association = {
         network_security_group_id = azurerm_network_security_group.this.id
