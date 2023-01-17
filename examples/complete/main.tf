@@ -92,6 +92,14 @@ module "network" {
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
       }
+
+      delegation = [
+        {
+          name                       = "delegation"
+          service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
+          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+        }
+      ]
     }
   }
 

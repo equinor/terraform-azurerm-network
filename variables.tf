@@ -32,6 +32,12 @@ variable "subnets" {
     address_prefixes  = list(string)
     service_endpoints = optional(list(string), [])
 
+    delegation = optional(list(object({
+      name                       = string
+      service_delegation_name    = string
+      service_delegation_actions = optional(list(string), [])
+    })), [])
+
     network_security_group_association = optional(object({
       network_security_group_id = string
     }))
