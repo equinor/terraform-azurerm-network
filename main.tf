@@ -26,7 +26,6 @@ resource "azurerm_subnet" "this" {
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = each.value["address_prefixes"]
   service_endpoints    = each.value["service_endpoints"]
-  # delegation           = each.value["delegation"]
 
   dynamic "delegation" {
     for_each = each.value["delegation"]
