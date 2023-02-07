@@ -93,7 +93,7 @@ module "network" {
         route_table_id = azurerm_route_table.this.id
       }
 
-      delegation = [
+      delegations = [
         {
           name                       = "delegation"
           service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
