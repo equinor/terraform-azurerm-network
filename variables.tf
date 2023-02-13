@@ -24,6 +24,18 @@ variable "dns_servers" {
   default     = []
 }
 
+# ! WARNING: DDoS protection is a HIGH COST service!
+variable "ddos_protection_plan" {
+  description = "The DDoS Protection Plan for this Virtual Network. This is a HIGH COST service, ref. https://azure.microsoft.com/en-us/pricing/details/ddos-protection/#pricing."
+
+  type = object({
+    id     = string # The ID of this DDoS Protection Plan.
+    enable = string # Is DDoS Protection Plan enabled/disabled for this Virtual Network.
+  })
+
+  default = null
+}
+
 variable "subnets" {
   description = "A map of subnets to create for this virtual network."
 
