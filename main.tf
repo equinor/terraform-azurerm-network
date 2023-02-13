@@ -15,6 +15,15 @@ resource "azurerm_virtual_network" "this" {
   address_space       = var.address_spaces
   dns_servers         = var.dns_servers
 
+  dynamic "ddos_protection_plan" {
+    for_each = var.ddos_protection_plan != null ? [var.ddos_protection_plan] : []
+
+    content {
+      id     = each.value["id"]
+      enable = each.value["enable"]
+    }
+  }
+
   tags = var.tags
 }
 
