@@ -24,6 +24,7 @@ variable "dns_servers" {
   default     = []
 }
 
+# ! WARNING: DDoS protection is a HIGH COST service!
 variable "ddos_protection_plan" {
   description = "The DDoS Protection Plan for this Virtual Network. This is a HIGH COST service, ref. https://azure.microsoft.com/en-us/pricing/details/ddos-protection/#pricing."
 
