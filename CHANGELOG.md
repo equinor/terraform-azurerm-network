@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.7.0...v1.8.0) (2023-04-20)
+
+
+### Features
+
+* output address spaces ([#17](https://github.com/equinor/terraform-azurerm-network/issues/17)) ([d2000b4](https://github.com/equinor/terraform-azurerm-network/commit/d2000b407f43824c31dedd4d6c090560176a06d5))
+
 ## [1.7.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.6.0...v1.7.0) (2023-02-13)
 
 
