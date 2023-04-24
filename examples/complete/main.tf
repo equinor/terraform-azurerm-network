@@ -42,7 +42,6 @@ module "network_hub" {
   vnet_name                  = "vnet-hub-${random_id.this.hex}"
   resource_group_name        = azurerm_resource_group.this.name
   location                   = azurerm_resource_group.this.location
-  log_analytics_workspace_id = module.log_analytics.workspace_id
 
   address_spaces = ["10.0.0.0/16"]
   dns_servers    = ["10.0.0.4", "10.0.0.5"]
@@ -72,24 +71,13 @@ module "network_hub" {
   tags = local.tags
 }
 
-module "log_analytics" {
-  source = "github.com/equinor/terraform-azurerm-log-analytics?ref=v1.5.0"
-
-  workspace_name      = "log-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-
-  tags = local.tags
-}
-
 module "network" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
 
-  vnet_name                  = "vnet-${random_id.this.hex}"
-  resource_group_name        = azurerm_resource_group.this.name
-  location                   = azurerm_resource_group.this.location
-  log_analytics_workspace_id = module.log_analytics.workspace_id
+  vnet_name           = "vnet-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
 
   address_spaces = ["10.1.0.0/16"]
 
