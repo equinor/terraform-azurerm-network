@@ -95,7 +95,6 @@ module "network" {
 
       delegation = [
         {
-          name                       = "delegation"
           service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
           service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
         }

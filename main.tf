@@ -40,7 +40,10 @@ resource "azurerm_subnet" "this" {
     for_each = each.value["delegation"]
 
     content {
-      name = delegation.value["name"]
+      # If a name is not explicitly set, set it to the index of the current object.
+      # E.g., if two subnet delegations are to be configured, the first delegation will be named "0" and the second will be named "1".
+      # This is the default naming convention when creating a subnet delegation in the Azure Portal.
+      name = coalesce(delegation.value["name"], index(each.value["delegation"], delegation.value))
 
       service_delegation {
         name    = delegation.value["service_delegation_name"]
