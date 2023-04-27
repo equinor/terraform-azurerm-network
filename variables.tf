@@ -45,7 +45,7 @@ variable "subnets" {
     service_endpoints = optional(list(string), [])
 
     delegation = optional(list(object({
-      name                       = string
+      name                       = optional(string)
       service_delegation_name    = string
       service_delegation_actions = optional(list(string), [])
     })), [])
