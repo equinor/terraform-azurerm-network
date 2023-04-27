@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.8.0...v1.9.0) (2023-04-27)
+
+
+### Features
+
+* set default subnet delegation naming ([#21](https://github.com/equinor/terraform-azurerm-network/issues/21)) ([3ef5591](https://github.com/equinor/terraform-azurerm-network/commit/3ef55916eb0c0da5d07548ecec196cc612a943d0))
+
 ## [1.8.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.7.0...v1.8.0) (2023-04-20)
 
 
