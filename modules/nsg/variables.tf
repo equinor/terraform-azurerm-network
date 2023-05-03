@@ -25,8 +25,9 @@ variable "security_rules" {
     # The following default values are taken from Azure Portal
 
     description = optional(string, "")
-    access      = optional(string, "Allow")
-    protocol    = optional(string, "*")
+
+    access   = optional(string, "Allow")
+    protocol = optional(string, "*")
 
     source_address_prefix      = optional(string, "*")
     destination_address_prefix = optional(string, "*")
