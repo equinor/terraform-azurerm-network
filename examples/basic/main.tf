@@ -38,7 +38,7 @@ module "nsg" {
 
   security_rules = [
     {
-      name                   = "AllowAny8080InBound"
+      name                   = "Allow8080InBound"
       destination_port_range = "8080"
       direction              = "Inbound"
       priority               = 100
