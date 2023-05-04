@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.9.0...v1.10.0) (2023-05-04)
+
+
+### Features
+
+* **nsg:** create network security group ([#26](https://github.com/equinor/terraform-azurerm-network/issues/26)) ([5f0ad93](https://github.com/equinor/terraform-azurerm-network/commit/5f0ad9359ae15254794840b856816500df5ac9d1))
+
 ## [1.9.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.8.0...v1.9.0) (2023-04-27)
 
 
