@@ -57,6 +57,10 @@ variable "subnets" {
     route_table_association = optional(object({
       route_table_id = string
     }))
+
+    nat_gateway_association = optional(object({
+      nat_gateway_id = string
+    }))
   }))
 
   default = {}
