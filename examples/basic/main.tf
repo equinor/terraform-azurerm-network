@@ -45,3 +45,12 @@ module "nsg" {
     }
   ]
 }
+
+module "nat" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nat?ref=v0.0.0"
+  source = "../../modules/nat"
+
+  gateway_name        = "ng-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+}

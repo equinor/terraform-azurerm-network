@@ -107,10 +107,14 @@ module "network" {
         route_table_id = azurerm_route_table.this.id
       }
 
+      nat_gateway_association = {
+        nat_gateway_id = module.nat.gateway_id
+      }
+
       delegation = [
         {
           service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
-          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
         }
       ]
     }
@@ -120,6 +124,33 @@ module "network" {
     "this" = {
       name                      = "peer-${random_id.this.hex}"
       remote_virtual_network_id = module.network_hub.vnet_id
+    }
+  }
+
+  tags = local.tags
+}
+
+resource "azurerm_public_ip" "example" {
+  name                = "pip-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+
+  tags = local.tags
+}
+
+module "nat" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nat?ref=v0.0.0"
+  source = "../../modules/nat"
+
+  gateway_name        = "ng-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  public_ip_associations = {
+    "this" = {
+      public_ip_address_id = azurerm_public_ip.example.id
     }
   }
 
