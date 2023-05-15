@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.10.0...v1.11.0) (2023-05-15)
+
+
+### Features
+
+* create NAT gateway ([#28](https://github.com/equinor/terraform-azurerm-network/issues/28)) ([ba42082](https://github.com/equinor/terraform-azurerm-network/commit/ba42082abc8a0980eef89c34cac5f9fb9740a6f7))
+
 ## [1.10.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.9.0...v1.10.0) (2023-05-04)
 
 
