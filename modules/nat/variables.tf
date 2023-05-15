@@ -13,7 +13,7 @@ variable "location" {
   type        = string
 }
 
-variable "public_ip_association" {
+variable "public_ip_associations" {
   description = "A map of public IP addresses to associate with this NAT gateway."
 
   type = map(object({

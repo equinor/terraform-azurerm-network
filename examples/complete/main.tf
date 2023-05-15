@@ -148,7 +148,7 @@ module "nat" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 
-  public_ip_association = {
+  public_ip_associations = {
     "this" = {
       public_ip_address_id = azurerm_public_ip.example.id
     }
