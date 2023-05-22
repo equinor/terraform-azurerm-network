@@ -22,7 +22,7 @@ variable "ip_configuration" {
     private_ip_address_version    = optional(string)
     private_ip_address_allocation = string
     private_ip_address            = optional(string)
-    primary                       = optional(bool, true)
+    primary                       = optional(bool)
 
   }))
 
