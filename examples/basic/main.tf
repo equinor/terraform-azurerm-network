@@ -27,3 +27,20 @@ module "network" {
     }
   }
 }
+
+module "nic" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nic?ref=v0.0.0"
+  source = "../../modules/nic"
+
+  name                = "nic-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  ip_configuration = {
+    "ip_configuration_block" = {
+      name                          = "ip_config_name"
+      subnet_id                     = module.network.subnet_ids["vm"]
+      private_ip_address_allocation = "Dynamic"
+    }
+  }
+}
