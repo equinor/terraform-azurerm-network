@@ -44,3 +44,30 @@ module "nic" {
     }
   }
 }
+
+module "nsg" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nsg?ref=v0.0.0"
+  source = "../../modules/nsg"
+
+  nsg_name            = "nsg-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  security_rules = [
+    {
+      name                   = "Allow8080InBound"
+      destination_port_range = "8080"
+      direction              = "Inbound"
+      priority               = 100
+    }
+  ]
+}
+
+module "nat" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nat?ref=v0.0.0"
+  source = "../../modules/nat"
+
+  gateway_name        = "ng-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+}

@@ -19,22 +19,6 @@ resource "azurerm_resource_group" "this" {
   tags = local.tags
 }
 
-resource "azurerm_network_security_group" "this" {
-  name                = "nsg-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-
-  tags = local.tags
-}
-
-resource "azurerm_route_table" "this" {
-  name                = "rt-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-
-  tags = local.tags
-}
-
 module "network_hub" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
@@ -49,14 +33,6 @@ module "network_hub" {
     "this" = {
       name             = "snet-${random_id.this.hex}"
       address_prefixes = ["10.0.1.0/24"]
-
-      network_security_group_association = {
-        network_security_group_id = azurerm_network_security_group.this.id
-      }
-
-      route_table_association = {
-        route_table_id = azurerm_route_table.this.id
-      }
     }
   }
 
@@ -66,6 +42,44 @@ module "network_hub" {
       remote_virtual_network_id = module.network.vnet_id
     }
   }
+
+  tags = local.tags
+}
+
+module "nsg" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nsg?ref=v0.0.0"
+  source = "../../modules/nsg"
+
+  nsg_name            = "nsg-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  security_rules = [
+    {
+      name                       = "AllowInternetTcp80OutBound"
+      destination_address_prefix = "Internet"
+      protocol                   = "Tcp"
+      destination_port_range     = "80"
+      direction                  = "Outbound"
+      priority                   = 100
+    },
+    {
+      name                       = "AllowInternetTcp80InBound"
+      destination_address_prefix = "Internet"
+      protocol                   = "Tcp"
+      destination_port_range     = "80"
+      direction                  = "Inbound"
+      priority                   = 100
+    }
+  ]
+
+  tags = local.tags
+}
+
+resource "azurerm_route_table" "this" {
+  name                = "rt-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
 
   tags = local.tags
 }
@@ -86,17 +100,21 @@ module "network" {
       service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
 
       network_security_group_association = {
-        network_security_group_id = azurerm_network_security_group.this.id
+        network_security_group_id = module.nsg.nsg_id
       }
 
       route_table_association = {
         route_table_id = azurerm_route_table.this.id
       }
 
+      nat_gateway_association = {
+        nat_gateway_id = module.nat.gateway_id
+      }
+
       delegation = [
         {
           service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
-          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
         }
       ]
     }
@@ -128,6 +146,33 @@ module "nic" {
       private_ip_address_allocation = "Dynamic"
       private_ip_address            = "10.0.1.4"
       primary                       = true
+    }
+  }
+
+  tags = local.tags
+}
+
+resource "azurerm_public_ip" "example" {
+  name                = "pip-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+
+  tags = local.tags
+}
+
+module "nat" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nat?ref=v0.0.0"
+  source = "../../modules/nat"
+
+  gateway_name        = "ng-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  public_ip_associations = {
+    "this" = {
+      public_ip_address_id = azurerm_public_ip.example.id
     }
   }
 
