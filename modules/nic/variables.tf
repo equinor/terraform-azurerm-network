@@ -14,7 +14,7 @@ variable "location" {
 }
 
 variable "ip_configuration" {
-  description = "A map of IP configuration with supported blockss"
+  description = "A map of IP configurations to create for this network interface card."
 
   type = map(object({
     name                          = string
