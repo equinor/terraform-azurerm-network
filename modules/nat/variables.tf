@@ -1,8 +1,3 @@
-variable "subnet_name" {
-  description = "The name of the Subnet."
-  type        = string
-}
-
 variable "gateway_name" {
   description = "The name of this NAT gateway."
   type        = string
@@ -16,6 +11,16 @@ variable "resource_group_name" {
 variable "location" {
   description = "The location to create the resources in."
   type        = string
+}
+
+variable "subnet_nat_gateway_associations" {
+  description = "A map of subnet NAT Gateway associations."
+
+  type = map(object({
+    subnet_id = string
+  }))
+
+  default = {}
 }
 
 variable "public_ip_associations" {
