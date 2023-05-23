@@ -8,11 +8,11 @@ resource "azurerm_network_interface" "this" {
 
     content {
       name                          = ip_configuration.value["name"]
-      subnet_id                     = ip_configuration.value["subnet_id"]
-      private_ip_address_version    = ip_configuration.value["private_ip_address_version"]
       private_ip_address_allocation = ip_configuration.value["private_ip_address_allocation"]
-      private_ip_address            = ip_configuration.value["private_ip_address"]
       primary                       = ip_configuration.value["primary"]
+      private_ip_address_version    = ip_configuration.value["private_ip_address_version"]
+      subnet_id                     = ip_configuration.value["subnet_id"]
+      private_ip_address            = ip_configuration.value["private_ip_address"]
     }
   }
 }

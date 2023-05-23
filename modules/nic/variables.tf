@@ -18,27 +18,15 @@ variable "ip_configuration" {
 
   type = map(object({
     name                          = string
-    subnet_id                     = optional(string)
-    private_ip_address_version    = optional(string)
-    private_ip_address_allocation = string
+    private_ip_address_allocation = string                   # Possible values are Dynamic and Static. Default is set to Dynamic.
+    primary                       = optional(bool, true)     # Must be true if multiple ip configuration blocks are specified.
+    private_ip_address_version    = optional(string, "IPv4") # Possible values are IPv4 or IPv6. Defaults to IPv4.
+    subnet_id                     = optional(string)         # Required when private_ip_address_version is set to IPv4.
     private_ip_address            = optional(string)
-    primary                       = optional(bool)
-
   }))
 
-  default = {
-    "ip_configuration_block" = {
-      name                          = "ip_config_name"
-      subnet_id                     = ""
-      private_ip_address_version    = "IPv4"
-      private_ip_address_allocation = "Dynamic"
-      private_ip_address            = "10.0.1.4"
-      primary                       = true
-    }
-  }
+  default = {}
 }
-# private ip address version defaults to IPv4, and subnet id is required when private ip address version is set to IPv4
-# got the private ip address from a created network interface in Azure portal and following that example for the complete example
 
 variable "tags" {
   description = "A map of tags to assign to the resources."

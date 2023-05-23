@@ -94,8 +94,8 @@ module "network" {
   address_spaces      = ["10.1.0.0/16"]
 
   subnets = {
-    "this" = {
-      name              = "snet-${random_id.this.hex}"
+    "vm" = {
+      name              = "snet-vm-${random_id.this.hex}"
       address_prefixes  = ["10.1.1.0/24"]
       service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
 
@@ -139,13 +139,13 @@ module "nic" {
   location            = azurerm_resource_group.this.location
 
   ip_configuration = {
-    "ip_configuration_block" = {
-      name                          = "ip_config_name"
-      subnet_id                     = module.network_hub.subnet_ids["this"]
-      private_ip_address_version    = "IPv4"
+    "ip_configuration" = {
+      name                          = "ip_config-${random_id.this.hex}"
       private_ip_address_allocation = "Dynamic"
-      private_ip_address            = "10.0.1.4"
       primary                       = true
+      private_ip_address_version    = "IPv4"
+      subnet_id                     = module.network_hub.subnet_ids["this"]
+      private_ip_address            = "10.0.1.4"
     }
   }
 

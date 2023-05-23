@@ -37,10 +37,11 @@ module "nic" {
   location            = azurerm_resource_group.this.location
 
   ip_configuration = {
-    "ip_configuration_block" = {
-      name                          = "ip_config_name"
-      subnet_id                     = module.network.subnet_ids["vm"]
+    "ip_configuration" = {
+      name                          = "ip_config-${random_id.this.hex}"
       private_ip_address_allocation = "Dynamic"
+      private_ip_address_version    = "IPv4"
+      subnet_id                     = module.network.subnet_ids["vm"]
     }
   }
 }
