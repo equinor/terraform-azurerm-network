@@ -13,8 +13,8 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_nat_gateway_associations" {
-  description = "A map of subnet NAT Gateway associations."
+variable "subnet_associations" {
+  description = "A map of subnets to associate with this NAT gateway."
 
   type = map(object({
     subnet_id = string
