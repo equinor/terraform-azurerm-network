@@ -1,3 +1,8 @@
+variable "subnet_name" {
+  description = "The name of the Subnet."
+  type        = string
+}
+
 variable "gateway_name" {
   description = "The name of this NAT gateway."
   type        = string
