@@ -8,7 +8,7 @@ resource "azurerm_nat_gateway" "this" {
 }
 
 resource "azurerm_subnet_nat_gateway_association" "this" {
-  for_each = var.subnet_nat_gateway_associations
+  for_each = var.subnet_associations
 
   nat_gateway_id = azurerm_nat_gateway.this.id
   subnet_id      = each.value["subnet_id"]
