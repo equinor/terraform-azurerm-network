@@ -2,8 +2,8 @@ resource "azurerm_public_ip" "this" {
   name                = var.address_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
+  sku                 = var.sku
+  allocation_method   = var.allocation_method
 
   tags = var.tags
 }
