@@ -19,6 +19,14 @@ resource "azurerm_resource_group" "this" {
   tags = local.tags
 }
 
+module "log_analytics" {
+  source = "github.com/equinor/terraform-azurerm-log-analytics?ref=v1.4.0"
+
+  workspace_name      = "log-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+}
+
 module "network_hub" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
