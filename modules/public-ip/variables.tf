@@ -22,7 +22,7 @@ variable "sku" {
 variable "allocation_method" {
   description = "The allocation method to use for this public IP address."
   type        = string
-  default     = "Dynamic"
+  default     = "Static"
 }
 
 variable "diagnostic_setting_name" {
