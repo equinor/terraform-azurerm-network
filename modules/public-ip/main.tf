@@ -3,7 +3,10 @@ resource "azurerm_public_ip" "this" {
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = var.sku
-  allocation_method   = var.sku == "Standard" ? "Static" : var.allocation_method
+
+  # If sku is "Standard", allocation_method must be "Static".
+  # Ref: https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses#sku
+  allocation_method = var.sku == "Standard" ? "Static" : var.allocation_method
 
   tags = var.tags
 }
