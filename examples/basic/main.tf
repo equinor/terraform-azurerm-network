@@ -11,6 +11,14 @@ resource "azurerm_resource_group" "this" {
   location = var.location
 }
 
+module "log_analytics" {
+  source = "github.com/equinor/terraform-azurerm-log-analytics?ref=v1.4.0"
+
+  workspace_name      = "log-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+}
+
 module "network" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
@@ -53,4 +61,14 @@ module "nat" {
   gateway_name        = "ng-${random_id.this.hex}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
+}
+
+module "public_ip" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/public-ip?ref=v0.0.0"
+  source = "../../modules/public-ip"
+
+  address_name               = "pip-${random_id.this.hex}"
+  resource_group_name        = azurerm_resource_group.this.name
+  location                   = azurerm_resource_group.this.location
+  log_analytics_workspace_id = module.log_analytics.workspace_id
 }

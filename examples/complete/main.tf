@@ -130,12 +130,16 @@ module "network" {
   tags = local.tags
 }
 
-resource "azurerm_public_ip" "example" {
-  name                = "pip-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
+module "public_ip" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/public-ip?ref=v0.0.0"
+  source = "../../modules/public-ip"
+
+  address_name               = "pip-${random_id.this.hex}"
+  resource_group_name        = azurerm_resource_group.this.name
+  location                   = azurerm_resource_group.this.location
+  log_analytics_workspace_id = module.log_analytics.workspace_id
+  sku                        = "Standard"
+  allocation_method          = "Static"
 
   tags = local.tags
 }
@@ -149,8 +153,8 @@ module "nat" {
   location            = azurerm_resource_group.this.location
 
   public_ip_associations = {
-    "this" = {
-      public_ip_address_id = azurerm_public_ip.example.id
+    "example" = {
+      public_ip_address_id = module.public_ip.address_id
     }
   }
 
