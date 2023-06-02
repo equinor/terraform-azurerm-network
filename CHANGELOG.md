@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.12.0...v1.13.0) (2023-06-02)
+
+
+### Features
+
+* create public IP address ([#34](https://github.com/equinor/terraform-azurerm-network/issues/34)) ([dddeb73](https://github.com/equinor/terraform-azurerm-network/commit/dddeb734be116418be2efacacea7af2e49f427dc))
+
 ## [1.12.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.11.0...v1.12.0) (2023-05-23)
 
 
