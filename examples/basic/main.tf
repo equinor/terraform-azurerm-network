@@ -36,6 +36,24 @@ module "network" {
   }
 }
 
+module "nic" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nic?ref=v0.0.0"
+  source = "../../modules/nic"
+
+  name                = "nic-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  ip_configuration = {
+    "ip_configuration" = {
+      name                          = "ip_config-${random_id.this.hex}"
+      private_ip_address_allocation = "Dynamic"
+      private_ip_address_version    = "IPv4"
+      subnet_id                     = module.network.subnet_ids["vm"]
+    }
+  }
+}
+
 module "nsg" {
   # source = "github.com/equinor/terraform-azurerm-network//modules/nsg?ref=v0.0.0"
   source = "../../modules/nsg"

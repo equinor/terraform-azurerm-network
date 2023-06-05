@@ -102,8 +102,8 @@ module "network" {
   address_spaces      = ["10.1.0.0/16"]
 
   subnets = {
-    "this" = {
-      name              = "snet-${random_id.this.hex}"
+    "vm" = {
+      name              = "snet-vm-${random_id.this.hex}"
       address_prefixes  = ["10.1.1.0/24"]
       service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
 
@@ -136,6 +136,36 @@ module "network" {
   }
 
   tags = local.tags
+}
+
+module "nic" {
+  # source = "github.com/equinor/terraform-azurerm-network//modules/nic?ref=v0.0.0"
+  source = "../../modules/nic"
+
+  name                = "nic-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  ip_configuration = {
+    "ip_configuration" = {
+      name                          = "ip_config-${random_id.this.hex}"
+      private_ip_address_allocation = "Dynamic"
+      primary                       = true
+      private_ip_address_version    = "IPv4"
+      subnet_id                     = module.network_hub.subnet_ids["this"]
+      private_ip_address            = "10.0.1.4"
+    }
+  }
+
+  tags = local.tags
+}
+
+resource "azurerm_public_ip" "example" {
+  name                = "pip-${random_id.this.hex}"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
 }
 
 module "public_ip" {
