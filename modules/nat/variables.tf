@@ -13,6 +13,16 @@ variable "location" {
   type        = string
 }
 
+variable "subnet_associations" {
+  description = "A map of subnets to associate with this NAT gateway."
+
+  type = map(object({
+    subnet_id = string
+  }))
+
+  default = {}
+}
+
 variable "public_ip_associations" {
   description = "A map of public IP addresses to associate with this NAT gateway."
 

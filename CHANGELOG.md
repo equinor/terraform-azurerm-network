@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.13.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.12.0...v1.13.0) (2023-06-02)
+
+
+### Features
+
+* create public IP address ([#34](https://github.com/equinor/terraform-azurerm-network/issues/34)) ([dddeb73](https://github.com/equinor/terraform-azurerm-network/commit/dddeb734be116418be2efacacea7af2e49f427dc))
+
+## [1.12.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.11.0...v1.12.0) (2023-05-23)
+
+
+### Features
+
+* **nsg:** create subnet and subnet nat association ([#31](https://github.com/equinor/terraform-azurerm-network/issues/31)) ([ed2bdf0](https://github.com/equinor/terraform-azurerm-network/commit/ed2bdf00d41eccac07ccd5a088e9632ceef7f824))
+
 ## [1.11.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.10.0...v1.11.0) (2023-05-15)
 
 

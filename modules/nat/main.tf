@@ -7,6 +7,13 @@ resource "azurerm_nat_gateway" "this" {
   tags = var.tags
 }
 
+resource "azurerm_subnet_nat_gateway_association" "this" {
+  for_each = var.subnet_associations
+
+  nat_gateway_id = azurerm_nat_gateway.this.id
+  subnet_id      = each.value["subnet_id"]
+}
+
 resource "azurerm_nat_gateway_public_ip_association" "this" {
   for_each = var.public_ip_associations
 
