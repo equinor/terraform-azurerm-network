@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.13.0...v1.14.0) (2023-06-05)
+
+
+### Features
+
+* create network interface ([#30](https://github.com/equinor/terraform-azurerm-network/issues/30)) ([3dee697](https://github.com/equinor/terraform-azurerm-network/commit/3dee6975f5f463354e044f2533322d978790ed25))
+
 ## [1.13.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.12.0...v1.13.0) (2023-06-02)
 
 
