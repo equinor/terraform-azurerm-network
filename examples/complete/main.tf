@@ -58,9 +58,11 @@ module "nsg" {
   # source = "github.com/equinor/terraform-azurerm-network//modules/nsg?ref=v0.0.0"
   source = "../../modules/nsg"
 
-  nsg_name            = "nsg-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  nsg_name                   = "nsg-${random_id.this.hex}"
+  resource_group_name        = azurerm_resource_group.this.name
+  location                   = azurerm_resource_group.this.location
+  log_analytics_workspace_id = module.log_analytics.workspace_id
+
 
   security_rules = [
     {
@@ -158,14 +160,6 @@ module "nic" {
   }
 
   tags = local.tags
-}
-
-resource "azurerm_public_ip" "example" {
-  name                = "pip-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
 }
 
 module "public_ip" {

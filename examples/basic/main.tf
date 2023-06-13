@@ -58,9 +58,11 @@ module "nsg" {
   # source = "github.com/equinor/terraform-azurerm-network//modules/nsg?ref=v0.0.0"
   source = "../../modules/nsg"
 
-  nsg_name            = "nsg-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  nsg_name                   = "nsg-${random_id.this.hex}"
+  resource_group_name        = azurerm_resource_group.this.name
+  location                   = azurerm_resource_group.this.location
+  log_analytics_workspace_id = module.log_analytics.workspace_id
+
 
   security_rules = [
     {
