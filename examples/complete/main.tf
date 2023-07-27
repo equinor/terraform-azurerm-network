@@ -48,10 +48,10 @@ module "network_hub" {
 
 resource "azurerm_network_security_group" "example" {
   name                = "nsg-${random_id.suffix.hex}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
 
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "azurerm_route_table" "example" {
