@@ -8,7 +8,7 @@ locals {
   }
 }
 
-resource "random_id" "example" {
+resource "random_id" "suffix" {
   byte_length = 8
 }
 
