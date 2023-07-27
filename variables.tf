@@ -24,13 +24,13 @@ variable "dns_servers" {
   default     = []
 }
 
-# ! WARNING: DDoS protection is a HIGH COST service!
+# WARNING: DDoS Protection is a HIGH COST service!
 variable "ddos_protection_plan" {
-  description = "The DDoS Protection Plan for this Virtual Network. This is a HIGH COST service, ref. https://azure.microsoft.com/en-us/pricing/details/ddos-protection/#pricing."
+  description = "A DDoS Protection plan for this virtual network. This is a HIGH COST service (ref: https://azure.microsoft.com/en-us/pricing/details/ddos-protection/)."
 
   type = object({
-    id     = string # The ID of this DDoS Protection Plan.
-    enable = string # Is DDoS Protection Plan enabled/disabled for this Virtual Network.
+    id     = string
+    enable = optional(bool, false) # Disabled by default to prevent accidentally enabling HIGH COST service.
   })
 
   default = null
