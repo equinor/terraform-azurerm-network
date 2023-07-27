@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.14.0...v2.0.0) (2023-07-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* move submodules to standalone modules ([#44](https://github.com/equinor/terraform-azurerm-network/issues/44))
+* simplify delegation configuration ([#41](https://github.com/equinor/terraform-azurerm-network/issues/41))
+
+### Bug Fixes
+
+* unable to configure DDoS Protection plan ([#45](https://github.com/equinor/terraform-azurerm-network/issues/45)) ([28980df](https://github.com/equinor/terraform-azurerm-network/commit/28980df97dd552cb376484161208611824f0d316))
+
+
+### Miscellaneous Chores
+
+* move submodules to standalone modules ([#44](https://github.com/equinor/terraform-azurerm-network/issues/44)) ([b8ff56b](https://github.com/equinor/terraform-azurerm-network/commit/b8ff56b0e3bf24287b3cb0475b1df45c377b4fe0))
+
+
+### Code Refactoring
+
+* simplify delegation configuration ([#41](https://github.com/equinor/terraform-azurerm-network/issues/41)) ([a675118](https://github.com/equinor/terraform-azurerm-network/commit/a675118febdc9b278e4d7f89922b7a9f3e34adf4))
+
 ## [1.14.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.13.0...v1.14.0) (2023-06-05)
 
 
