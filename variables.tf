@@ -44,10 +44,10 @@ variable "subnets" {
     address_prefixes  = list(string)
     service_endpoints = optional(list(string), [])
 
-    delegation = optional(list(object({
-      name                       = optional(string)
-      service_delegation_name    = string
-      service_delegation_actions = optional(list(string), [])
+    delegations = optional(list(object({
+      name            = optional(string)
+      service_name    = string
+      service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
     })), [])
 
     network_security_group_association = optional(object({

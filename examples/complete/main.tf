@@ -107,6 +107,10 @@ module "network" {
       address_prefixes  = ["10.1.1.0/24"]
       service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
 
+      delegations = [{
+        service_name = "Microsoft.ContainerInstance/containerGroups"
+      }]
+
       network_security_group_association = {
         network_security_group_id = module.nsg.nsg_id
       }
@@ -118,19 +122,12 @@ module "network" {
       nat_gateway_association = {
         nat_gateway_id = module.nat.gateway_id
       }
-
-      delegation = [
-        {
-          service_delegation_name    = "Microsoft.ContainerInstance/containerGroups"
-          service_delegation_actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-        }
-      ]
     }
   }
 
   virtual_network_peerings = {
     "this" = {
-      name                      = "peer-${random_id.this.hex}"
+      name                      = "hub-peering"
       remote_virtual_network_id = module.network_hub.vnet_id
     }
   }
@@ -158,14 +155,6 @@ module "nic" {
   }
 
   tags = local.tags
-}
-
-resource "azurerm_public_ip" "example" {
-  name                = "pip-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
 }
 
 module "public_ip" {
