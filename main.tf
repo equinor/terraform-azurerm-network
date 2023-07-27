@@ -41,7 +41,7 @@ resource "azurerm_subnet" "this" {
   service_endpoints    = each.value["service_endpoints"]
 
   dynamic "delegation" {
-    for_each = each.value["delegation"]
+    for_each = each.value["delegations"]
 
     content {
       # If a name is not explicitly set, set it to the index of the current object.
@@ -50,8 +50,8 @@ resource "azurerm_subnet" "this" {
       name = coalesce(delegation.value["name"], index(each.value["delegation"], delegation.value))
 
       service_delegation {
-        name    = delegation.value["service_delegation_name"]
-        actions = delegation.value["service_delegation_actions"]
+        name    = delegation.value["service_name"]
+        actions = delegation.value["service_actions"]
       }
     }
   }
