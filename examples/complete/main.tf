@@ -157,14 +157,6 @@ module "nic" {
   tags = local.tags
 }
 
-resource "azurerm_public_ip" "example" {
-  name                = "pip-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
 module "public_ip" {
   # source = "github.com/equinor/terraform-azurerm-network//modules/public-ip?ref=v0.0.0"
   source = "../../modules/public-ip"
