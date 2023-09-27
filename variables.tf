@@ -45,9 +45,9 @@ variable "subnets" {
     service_endpoints = optional(list(string), [])
 
     delegations = optional(list(object({
-      name            = optional(string)
       service_name    = string
       service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
+      name            = optional(string)
     })), [])
 
     network_security_group = optional(object({
