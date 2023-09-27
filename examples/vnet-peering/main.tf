@@ -9,8 +9,6 @@ resource "random_id" "suffix" {
 resource "azurerm_resource_group" "example" {
   name     = "rg-${random_id.suffix.hex}"
   location = var.location
-
-  tags = local.tags
 }
 
 module "network_hub" {
