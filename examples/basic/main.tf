@@ -15,8 +15,6 @@ resource "azurerm_network_security_group" "example" {
   name                = "nsg-${random_id.suffix.hex}"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-
-  tags = local.tags
 }
 
 module "network" {
