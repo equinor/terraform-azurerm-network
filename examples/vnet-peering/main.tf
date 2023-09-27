@@ -32,7 +32,7 @@ module "network_hub" {
   virtual_network_peerings = {
     "spoke" = {
       name                      = "spoke-01-peering"
-      remote_virtual_network_id = module.network_spoke.vnet_id
+      remote_virtual_network_id = module.network_spoke_01.vnet_id
     }
   }
 }
