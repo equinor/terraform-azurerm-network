@@ -45,21 +45,21 @@ variable "subnets" {
     service_endpoints = optional(list(string), [])
 
     delegations = optional(list(object({
-      name            = optional(string)
       service_name    = string
       service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
+      name            = optional(string)
     })), [])
 
-    network_security_group_association = optional(object({
-      network_security_group_id = string
+    network_security_group = optional(object({
+      id = string
     }))
 
-    route_table_association = optional(object({
-      route_table_id = string
+    route_table = optional(object({
+      id = string
     }))
 
-    nat_gateway_association = optional(object({
-      nat_gateway_id = string
+    nat_gateway = optional(object({
+      id = string
     }))
   }))
 

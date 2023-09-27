@@ -1,14 +1,14 @@
 locals {
   subnet_route_table_associations = {
-    for k, v in var.subnets : k => v["route_table_association"].route_table_id if v["route_table_association"] != null
+    for k, v in var.subnets : k => v["route_table"].id if v["route_table"] != null
   }
 
   subnet_network_security_group_associations = {
-    for k, v in var.subnets : k => v["network_security_group_association"].network_security_group_id if v["network_security_group_association"] != null
+    for k, v in var.subnets : k => v["network_security_group"].id if v["network_security_group"] != null
   }
 
   subnet_nat_gateway_associations = {
-    for k, v in var.subnets : k => v["nat_gateway_association"].nat_gateway_id if v["nat_gateway_association"] != null
+    for k, v in var.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
   }
 }
 
