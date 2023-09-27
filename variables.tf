@@ -50,9 +50,11 @@ variable "subnets" {
       name            = optional(string)
     })), [])
 
-    network_security_group = optional(object({
+    network_security_group = object({
+      # Wrap an object around the NSG ID.
+      # If the subnet shouldn't be associated with an NSG, set the value of the object to null.
       id = string
-    }))
+    })
 
     route_table = optional(object({
       id = string
