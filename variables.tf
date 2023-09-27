@@ -51,6 +51,8 @@ variable "subnets" {
     })), [])
 
     network_security_group = object({
+      # Wrap an object around the NSG ID.
+      # If the subnet shouldn't be associated with an NSG, set the value of the object to null.
       id = string
     })
 
