@@ -50,9 +50,9 @@ variable "subnets" {
       service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
     })), [])
 
-    network_security_group_association = optional(object({
+    network_security_group_association = object({
       network_security_group_id = string
-    }))
+    })
 
     route_table_association = optional(object({
       route_table_id = string
