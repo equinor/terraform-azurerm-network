@@ -11,6 +11,12 @@ resource "azurerm_resource_group" "example" {
   location = var.location
 }
 
+resource "azurerm_network_security_group" "example" {
+  name                = "nsg-${random_id.suffix.hex}"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+}
+
 module "network_hub" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
@@ -24,6 +30,10 @@ module "network_hub" {
     "default" = {
       name             = "default"
       address_prefixes = ["10.0.1.0/24"]
+
+      network_security_group = {
+        id = azurerm_network_security_group.example.id
+      }
     }
   }
 
@@ -48,6 +58,10 @@ module "network_spoke_01" {
     "default" = {
       name             = "default"
       address_prefixes = ["10.1.1.0/24"]
+
+      network_security_group = {
+        id = azurerm_network_security_group.example.id
+      }
     }
   }
 
