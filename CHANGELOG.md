@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.0.0](https://github.com/equinor/terraform-azurerm-network/compare/v2.0.0...v3.0.0) (2023-09-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* simplify DDoS Protection plan config ([#52](https://github.com/equinor/terraform-azurerm-network/issues/52))
+* associate subnet with NSG by default ([#50](https://github.com/equinor/terraform-azurerm-network/issues/50))
+* simplify subnet associations ([#47](https://github.com/equinor/terraform-azurerm-network/issues/47))
+
+### Features
+
+* associate subnet with NSG by default ([#50](https://github.com/equinor/terraform-azurerm-network/issues/50)) ([a08c207](https://github.com/equinor/terraform-azurerm-network/commit/a08c207d6ed0b30d776e556e0caf0014779dd132))
+
+
+### Code Refactoring
+
+* simplify DDoS Protection plan config ([#52](https://github.com/equinor/terraform-azurerm-network/issues/52)) ([ab0b213](https://github.com/equinor/terraform-azurerm-network/commit/ab0b213809e208c4e41601a1f9503e6b1e631af9))
+* simplify subnet associations ([#47](https://github.com/equinor/terraform-azurerm-network/issues/47)) ([9eaf248](https://github.com/equinor/terraform-azurerm-network/commit/9eaf248a6fcbfe58e2acc8d5b55952ba92e3cc15))
+
 ## [2.0.0](https://github.com/equinor/terraform-azurerm-network/compare/v1.14.0...v2.0.0) (2023-07-27)
 
 
