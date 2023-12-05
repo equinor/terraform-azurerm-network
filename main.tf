@@ -1,14 +1,6 @@
 locals {
-  subnet_route_table_associations = {
-    for k, v in var.subnets : k => v["route_table"].id if v["route_table"] != null
-  }
-
   subnet_network_security_group_associations = {
-    for k, v in var.subnets : k => v["network_security_group"].id if v["network_security_group"] != null
-  }
-
-  subnet_nat_gateway_associations = {
-    for k, v in var.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
+    for key, value in var.subnets : key => value.network_security_group_id
   }
 }
 
@@ -41,17 +33,14 @@ resource "azurerm_subnet" "this" {
   service_endpoints    = each.value["service_endpoints"]
 
   dynamic "delegation" {
-    for_each = each.value["delegations"]
+    for_each = each.value["delegation_service_name"] != null ? [0] : []
 
     content {
-      # If a name is not explicitly set, set it to the index of the current object.
-      # E.g., if two subnet delegations are to be configured, the first delegation will be named "0" and the second will be named "1".
-      # This is the default naming convention when creating a subnet delegation in the Azure Portal.
-      name = coalesce(delegation.value["name"], index(each.value["delegations"], delegation.value))
+      name = "0"
 
       service_delegation {
-        name    = delegation.value["service_name"]
-        actions = delegation.value["service_actions"]
+        name    = each.value["service_delegation_name"]
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
       }
     }
   }
@@ -62,20 +51,6 @@ resource "azurerm_subnet_network_security_group_association" "this" {
 
   subnet_id                 = azurerm_subnet.this[each.key].id
   network_security_group_id = each.value
-}
-
-resource "azurerm_subnet_route_table_association" "this" {
-  for_each = local.subnet_route_table_associations
-
-  subnet_id      = azurerm_subnet.this[each.key].id
-  route_table_id = each.value
-}
-
-resource "azurerm_subnet_nat_gateway_association" "this" {
-  for_each = local.subnet_nat_gateway_associations
-
-  subnet_id      = azurerm_subnet.this[each.key].id
-  nat_gateway_id = each.value
 }
 
 resource "azurerm_virtual_network_peering" "this" {

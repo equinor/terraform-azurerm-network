@@ -32,10 +32,8 @@ variable "subnets" {
     address_prefixes          = list(string)
     network_security_group_id = string
 
-    delegation_service_name    = optional(string)
-    delegation_service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
-
-    service_endpoints = optional(list(string), [])
+    service_delegation_name = optional(string)
+    service_endpoints       = optional(list(string), [])
   }))
 
   default = {}
