@@ -6,15 +6,10 @@ resource "random_id" "suffix" {
   byte_length = 8
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "rg-${random_id.suffix.hex}"
-  location = var.location
-}
-
 resource "azurerm_network_security_group" "example" {
   name                = "nsg-${random_id.suffix.hex}"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
 }
 
 module "network" {
@@ -22,8 +17,8 @@ module "network" {
   source = "../.."
 
   vnet_name           = "vnet-${random_id.suffix.hex}"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   address_spaces      = ["10.0.0.0/16"]
 
   subnets = {
