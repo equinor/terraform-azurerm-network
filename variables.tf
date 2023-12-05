@@ -31,9 +31,8 @@ variable "subnets" {
     name                      = string
     address_prefixes          = list(string)
     network_security_group_id = string
-
-    service_delegation_name = optional(string)
-    service_endpoints       = optional(list(string), [])
+    service_endpoints         = optional(list(string), [])
+    service_delegation_name   = optional(string)
   }))
 
   default = {}
