@@ -6,15 +6,10 @@ resource "random_id" "suffix" {
   byte_length = 8
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "rg-${random_id.suffix.hex}"
-  location = var.location
-}
-
 resource "azurerm_network_security_group" "example" {
   name                = "nsg-${random_id.suffix.hex}"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
 }
 
 module "network_hub" {
@@ -22,8 +17,8 @@ module "network_hub" {
   source = "../.."
 
   vnet_name           = "vnet-hub-${random_id.suffix.hex}"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   address_spaces      = ["10.0.0.0/16"]
 
   subnets = {
@@ -39,19 +34,19 @@ module "network_hub" {
 
   virtual_network_peerings = {
     "spoke" = {
-      name                      = "spoke-01-peering"
-      remote_virtual_network_id = module.network_spoke_01.vnet_id
+      name                      = "spoke-peering"
+      remote_virtual_network_id = module.network_spoke.vnet_id
     }
   }
 }
 
-module "network_spoke_01" {
+module "network_spoke" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
 
-  vnet_name           = "vnet-spoke-01-${random_id.suffix.hex}"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  vnet_name           = "vnet-spoke-${random_id.suffix.hex}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
   address_spaces      = ["10.1.0.0/16"]
 
   subnets = {
