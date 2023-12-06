@@ -23,12 +23,9 @@ module "network" {
 
   subnets = {
     "vm" = {
-      name             = "snet-vm-${random_id.suffix.hex}"
-      address_prefixes = ["10.0.1.0/24"]
-
-      network_security_group = {
-        id = azurerm_network_security_group.example.id
-      }
+      name                   = "snet-vm-${random_id.suffix.hex}"
+      address_prefixes       = ["10.0.1.0/24"]
+      network_security_group = { id = azurerm_network_security_group.example.id }
     }
   }
 }

@@ -23,12 +23,9 @@ module "network_hub" {
 
   subnets = {
     "default" = {
-      name             = "default"
-      address_prefixes = ["10.0.1.0/24"]
-
-      network_security_group = {
-        id = azurerm_network_security_group.example.id
-      }
+      name                   = "default"
+      address_prefixes       = ["10.0.1.0/24"]
+      network_security_group = { id = azurerm_network_security_group.example.id }
     }
   }
 
@@ -51,12 +48,9 @@ module "network_spoke" {
 
   subnets = {
     "default" = {
-      name             = "default"
-      address_prefixes = ["10.1.1.0/24"]
-
-      network_security_group = {
-        id = azurerm_network_security_group.example.id
-      }
+      name                   = "default"
+      address_prefixes       = ["10.1.1.0/24"]
+      network_security_group = { id = azurerm_network_security_group.example.id }
     }
   }
 

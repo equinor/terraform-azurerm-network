@@ -28,29 +28,18 @@ variable "subnets" {
   description = "A map of subnets to create for this virtual network."
 
   type = map(object({
-    name              = string
-    address_prefixes  = list(string)
-    service_endpoints = optional(list(string), [])
+    name                   = string
+    address_prefixes       = list(string)
+    network_security_group = object({ id = string })
+    nat_gateway            = optional(object({ id = string }))
+    route_table            = optional(object({ id = string }))
+    service_endpoints      = optional(list(string), [])
 
     delegations = optional(list(object({
       service_name    = string
       service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
       name            = optional(string)
     })), [])
-
-    network_security_group = object({
-      # Wrap an object around the NSG ID.
-      # If the subnet shouldn't be associated with an NSG, set the value of the object to null.
-      id = string
-    })
-
-    route_table = optional(object({
-      id = string
-    }))
-
-    nat_gateway = optional(object({
-      id = string
-    }))
   }))
 
   default = {}
