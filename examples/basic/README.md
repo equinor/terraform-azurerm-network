@@ -1,3 +1,3 @@
 # Basic example
 
-Terraform configuration which creates an Azure Virtual network resource with a single subnet.
+Creates an Azure Virtual Network with a single subnet.
