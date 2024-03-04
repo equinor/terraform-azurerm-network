@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/equinor/terraform-azurerm-network/compare/v3.0.0...v3.0.1) (2024-03-04)
+
+
+### Styles
+
+* update variable descriptions ([#64](https://github.com/equinor/terraform-azurerm-network/issues/64)) ([3316b7d](https://github.com/equinor/terraform-azurerm-network/commit/3316b7d16aac03cf859cba4436d9029a8c98d3d3))
+
 ## [3.0.0](https://github.com/equinor/terraform-azurerm-network/compare/v2.0.0...v3.0.0) (2023-09-28)
 
 
