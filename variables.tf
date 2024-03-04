@@ -14,7 +14,7 @@ variable "location" {
 }
 
 variable "address_spaces" {
-  description = "A list of address spaces that are used for this virtual network."
+  description = "A list of address spaces to use for this virtual network."
   type        = list(string)
 }
 
@@ -57,13 +57,13 @@ variable "virtual_network_peerings" {
 }
 
 variable "ddos_protection_plan_id" {
-  description = "WARNING: This is a HIGH COST service (ref: https://azure.microsoft.com/en-us/pricing/details/ddos-protection/)! The ID of a DDoS Protection plan to be associated with this virtual network?"
+  description = "The ID of a DDoS Protection plan to be associated with this virtual network? WARNING: This is a HIGH COST service! (ref: https://azure.microsoft.com/en-us/pricing/details/ddos-protection/)"
   type        = string
   default     = null
 }
 
 variable "ddos_protection_plan_enabled" {
-  description = "WARNING: This is a HIGH COST service (ref: https://azure.microsoft.com/en-us/pricing/details/ddos-protection/)! Should the DDoS Protection plan be enabled for this virtual network?"
+  description = "Should the DDoS Protection plan be enabled for this virtual network? WARNING: This is a HIGH COST service! (ref: https://azure.microsoft.com/en-us/pricing/details/ddos-protection/)"
   type        = bool
   default     = false
 }
