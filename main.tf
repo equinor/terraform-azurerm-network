@@ -34,11 +34,12 @@ resource "azurerm_virtual_network" "this" {
 resource "azurerm_subnet" "this" {
   for_each = var.subnets
 
-  name                 = each.value["name"]
-  resource_group_name  = azurerm_virtual_network.this.resource_group_name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = each.value["address_prefixes"]
-  service_endpoints    = each.value["service_endpoints"]
+  name                        = each.value["name"]
+  resource_group_name         = azurerm_virtual_network.this.resource_group_name
+  virtual_network_name        = azurerm_virtual_network.this.name
+  address_prefixes            = each.value["address_prefixes"]
+  service_endpoints           = each.value["service_endpoints"]
+  service_endpoint_policy_ids = each.value["service_endpoint_policy_ids"]
 
   dynamic "delegation" {
     for_each = each.value["delegations"]
