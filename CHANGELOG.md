@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/equinor/terraform-azurerm-network/compare/v3.0.1...v3.1.0) (2024-04-23)
+
+
+### Features
+
+* service endpoint policies ([#68](https://github.com/equinor/terraform-azurerm-network/issues/68)) ([07f18c7](https://github.com/equinor/terraform-azurerm-network/commit/07f18c73f22d1841101b6d287a31f57458414345))
+
 ## [3.0.1](https://github.com/equinor/terraform-azurerm-network/compare/v3.0.0...v3.0.1) (2024-03-04)
 
 
