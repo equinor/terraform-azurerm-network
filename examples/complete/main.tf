@@ -36,6 +36,12 @@ resource "azurerm_nat_gateway" "example" {
   tags = local.tags
 }
 
+resource "azurerm_subnet_service_endpoint_storage_policy" "this" {
+  name                = "se-${random_id.suffix.hex}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+}
+
 module "network" {
   # source = "github.com/equinor/terraform-azurerm-network?ref=v0.0.0"
   source = "../.."
@@ -67,6 +73,8 @@ module "network" {
         "Microsoft.KeyVault",
         "Microsoft.Storage"
       ]
+
+      service_endpoint_policy_ids = [azurerm_subnet_service_endpoint_storage_policy.this.id]
 
       delegations = [
         {
