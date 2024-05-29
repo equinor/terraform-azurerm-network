@@ -27,6 +27,27 @@ output "subnet_names" {
   }
 }
 
+output "subnet_route_table_association_ids" {
+  description = "A map of subnet route table association IDs."
+  value = {
+    for k, v in azurerm_subnet_route_table_association.this : k => v.id
+  }
+}
+
+output "subnet_network_security_group_association_ids" {
+  description = "A map of subnet network security group association IDs."
+  value = {
+    for k, v in azurerm_subnet_network_security_group_association.this : k => v.id
+  }
+}
+
+output "subnet_nat_gateway_association_ids" {
+  description = "A map of subnet NAT gateway association IDs."
+  value = {
+    for k, v in azurerm_subnet_nat_gateway_association.this : k => v.id
+  }
+}
+
 output "virtual_network_peering_names" {
   description = "A map of virtual network peering names."
   value = {
