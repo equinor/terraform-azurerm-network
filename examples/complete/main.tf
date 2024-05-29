@@ -56,16 +56,16 @@ module "network" {
       name             = "snet-ci-${random_id.suffix.hex}"
       address_prefixes = ["10.1.1.0/24"]
 
-      network_security_group = {
-        id = azurerm_network_security_group.example.id
+      network_security_group_association = {
+        network_security_group_id = azurerm_network_security_group.example.id
       }
 
-      nat_gateway = {
-        id = azurerm_nat_gateway.example.id
+      nat_gateway_association = {
+        nat_gateway_id = azurerm_nat_gateway.example.id
       }
 
-      route_table = {
-        id = azurerm_route_table.example.id
+      route_table_association = {
+        route_table_id = azurerm_route_table.example.id
       }
 
       service_endpoints = [

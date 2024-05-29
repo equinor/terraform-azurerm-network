@@ -1,14 +1,14 @@
 locals {
   subnet_route_table_associations = {
-    for k, v in var.subnets : k => v["route_table"].id if v["route_table"] != null
+    for k, v in var.subnets : k => v["route_table_association"] if v["route_table_association"] != null
   }
 
   subnet_network_security_group_associations = {
-    for k, v in var.subnets : k => v["network_security_group"].id if v["network_security_group"] != null
+    for k, v in var.subnets : k => v["network_security_group_association"] if v["network_security_group_association"] != null
   }
 
   subnet_nat_gateway_associations = {
-    for k, v in var.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
+    for k, v in var.subnets : k => v["nat_gateway_association"] if v["nat_gateway_association"] != null
   }
 }
 
@@ -62,21 +62,21 @@ resource "azurerm_subnet_network_security_group_association" "this" {
   for_each = local.subnet_network_security_group_associations
 
   subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = each.value
+  network_security_group_id = each.value.network_security_group_id
 }
 
 resource "azurerm_subnet_route_table_association" "this" {
   for_each = local.subnet_route_table_associations
 
   subnet_id      = azurerm_subnet.this[each.key].id
-  route_table_id = each.value
+  route_table_id = each.value.route_table_id
 }
 
 resource "azurerm_subnet_nat_gateway_association" "this" {
   for_each = local.subnet_nat_gateway_associations
 
   subnet_id      = azurerm_subnet.this[each.key].id
-  nat_gateway_id = each.value
+  nat_gateway_id = each.value.nat_gateway_id
 }
 
 resource "azurerm_virtual_network_peering" "this" {
