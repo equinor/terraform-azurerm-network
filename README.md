@@ -6,6 +6,12 @@
 
 Terraform module which creates Azure Network resources.
 
+## Features
+
+- Creates virtual network.
+- Creates subnets.
+- Creates virtual network peerings.
+
 ## Development
 
 1. Read [this document](https://code.visualstudio.com/docs/devcontainers/containers).
