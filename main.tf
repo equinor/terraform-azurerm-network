@@ -10,6 +10,20 @@ locals {
   subnet_nat_gateway_associations = {
     for k, v in var.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
   }
+
+  metric_alerts = {
+    "availability" = {
+      name        = "Under DDoS attack"
+      description = ""
+      metric_name = "IfUnderDDoSAttack"
+      aggregation = "Maximum"
+      operator    = "GreaterThan"
+      threshold   = 1
+      frequency   = "PT1M"
+      window_size = "PT5M"
+      severity    = 0 # Critical
+    }
+  }
 }
 
 resource "azurerm_virtual_network" "this" {
@@ -86,4 +100,31 @@ resource "azurerm_virtual_network_peering" "this" {
   resource_group_name       = var.resource_group_name
   virtual_network_name      = azurerm_virtual_network.this.name
   remote_virtual_network_id = each.value["remote_virtual_network_id"]
+}
+
+resource "azurerm_monitor_metric_alert" "this" {
+  for_each = local.metric_alerts
+
+  name                = "${each.value.name} - ${azurerm_virtual_network.this.name}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_virtual_network.this.id]
+  description         = each.value.description
+
+  criteria {
+    metric_namespace = "Microsoft.Network/virtualNetworks"
+    metric_name      = each.value.metric_name
+    aggregation      = each.value.aggregation
+    operator         = each.value.operator
+    threshold        = each.value.threshold
+  }
+
+  frequency   = each.value.frequency
+  window_size = each.value.window_size
+  severity    = each.value.severity
+
+  action {
+    action_group_id = var.action_group_id
+  }
+
+  tags = var.tags
 }
