@@ -11,6 +11,8 @@ Terraform module which creates Azure Network resources.
 - Creates virtual network.
 - Creates subnets.
 - Creates virtual network peerings.
+- Metric alerts sent to given action group by default:
+  - If under DDoS attack
 
 ## Development
 
