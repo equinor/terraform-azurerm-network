@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/equinor/terraform-azurerm-network/compare/v3.1.0...v3.1.1) (2024-08-29)
+
+
+### Documentation
+
+* add features list to README ([#75](https://github.com/equinor/terraform-azurerm-network/issues/75)) ([c2a2f1c](https://github.com/equinor/terraform-azurerm-network/commit/c2a2f1cefed78b2bf83ded1fa247704714a269ee))
+
 ## [3.1.0](https://github.com/equinor/terraform-azurerm-network/compare/v3.0.1...v3.1.0) (2024-04-23)
 
 
