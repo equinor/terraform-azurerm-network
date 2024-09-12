@@ -27,7 +27,7 @@ variable "dns_servers" {
 variable "subnets" {
   description = "A map of subnets to create for this virtual network."
 
-  type = list(object({
+  type = map(object({
     name             = string
     address_prefixes = list(string)
 
@@ -45,7 +45,7 @@ variable "subnets" {
     })), [])
   }))
 
-  default = []
+  default = {}
 }
 
 variable "virtual_network_peerings" {
