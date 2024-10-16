@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/equinor/terraform-azurerm-network/compare/v3.1.1...v3.2.0) (2024-10-16)
+
+
+### Features
+
+* configure private endpoint and private link endpoints ([#79](https://github.com/equinor/terraform-azurerm-network/issues/79)) ([6f62b93](https://github.com/equinor/terraform-azurerm-network/commit/6f62b939c38877352553f9371a2f4f3169d3350e))
+
 ## [3.1.1](https://github.com/equinor/terraform-azurerm-network/compare/v3.1.0...v3.1.1) (2024-08-29)
 
 
