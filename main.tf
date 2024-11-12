@@ -16,8 +16,10 @@ resource "azurerm_virtual_network" "this" {
       route_table_id = subnet.value.route_table_id
       # TODO(@hknutsen): nat_gateway_id = subnet.value.nat_gateway_id (hashicorp/terraform-provider-azurerm#27199)
 
-      service_endpoints           = subnet.value.service_endpoints
-      service_endpoint_policy_ids = subnet.value.service_endpoint_policy_ids
+      service_endpoints                             = subnet.value.service_endpoints
+      service_endpoint_policy_ids                   = subnet.value.service_endpoint_policy_ids
+      private_endpoint_network_policies             = subnet.value.service_endpoint_network_policies
+      private_link_service_network_policies_enabled = subnet.value.private_link_service_network_policies_enabled
 
       dynamic "delegation" {
         for_each = subnet.value.delegations
