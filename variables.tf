@@ -35,8 +35,10 @@ variable "subnets" {
     route_table_id    = optional(string)
     nat_gateway_id    = optional(string)
 
-    service_endpoints           = optional(list(string), [])
-    service_endpoint_policy_ids = optional(list(string), null)
+    service_endpoints                             = optional(list(string), [])
+    service_endpoint_policy_ids                   = optional(list(string), null)
+    private_endpoint_network_policies             = optional(string, "Disabled")
+    private_link_service_network_policies_enabled = optional(bool, true)
 
     delegations = optional(list(object({
       service_name    = string
@@ -46,6 +48,13 @@ variable "subnets" {
   }))
 
   default = {}
+
+  validation {
+    condition = alltrue([
+      for subnet in var.subnets : contains(["Disabled", "Enabled", "NetworkSecurityGroupEnabled", "RouteTableEnabled"], subnet.private_endpoint_network_policies)
+    ])
+    error_message = "The private_endpoint_network_policies attribute must be one of: Disabled, Enabled, NetworkSecurityGroupEnabled or RouteTableEnabled."
+  }
 }
 
 variable "virtual_network_peerings" {
