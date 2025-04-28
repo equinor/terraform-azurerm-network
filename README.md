@@ -1,57 +1,56 @@
 # Terraform module for Azure Network
 
-[![SCM Compliance](https://scm-compliance-api.radix.equinor.com/repos/equinor/terraform-azurerm-network/badge)](https://scm-compliance-api.radix.equinor.com/repos/equinor/terraform-azurerm-network/badge)
-[![Equinor Terraform Baseline](https://img.shields.io/badge/Equinor%20Terraform%20Baseline-1.0.0-blueviolet)](https://github.com/equinor/terraform-baseline)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![GitHub License](https://img.shields.io/github/license/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/blob/main/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/releases/latest)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+[![SCM Compliance](https://scm-compliance-api.radix.equinor.com/repos/equinor/terraform-azurerm-network/badge)](https://developer.equinor.com/governance/scm-policy/)
 
 Terraform module which creates Azure Network resources.
 
 ## Features
 
-- Creates virtual network.
-- Creates subnets.
-- Creates virtual network peerings.
+- Creates a virtual network in the specified resource group.
+- Creates specified subnets.
+- Creates specified virtual network peerings.
 
-## Development
+## Prerequisites
 
-1. Read [this document](https://code.visualstudio.com/docs/devcontainers/containers).
+- Azure role `Contributor` at the resource group scope.
 
-1. Clone this repository.
+## Usage
 
-1. Configure Terraform variables in a file `.devcontainer/devcontainer.env`:
+```terraform
+provider "azurerm" {
+  features {}
+}
 
-    ```env
-    TF_VAR_resource_group_name=
-    TF_VAR_location=
-    ```
+module "network" {
+  source  = "equinor/network/azurerm"
+  version = "~> 3.2"
 
-1. Open repository in dev container.
+  vnet_name           = "example-vnet"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  address_spaces      = ["10.0.0.0/16"]
 
-## Testing
+  subnets = {
+    "vm" = {
+      name             = "example-vm-snet"
+      address_prefixes = ["10.0.1.0/24"]
+    }
+  }
+}
 
-1. Change to the test directory:
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "westeurope"
+}
 
-    ```console
-    cd test
-    ```
-
-1. Login to Azure:
-
-    ```console
-    az login
-    ```
-
-1. Set active subscription:
-
-    ```console
-    az account set -s <SUBSCRIPTION_NAME_OR_ID>
-    ```
-
-1. Run tests:
-
-    ```console
-    go test -timeout 60m
-    ```
+output "vm_subnet_id" {
+  description = "The ID of the subnet to deploy virtual machines into."
+  value       = module.network.subnet_ids["vm"]
+}
+```
 
 ## Contributing
 
