@@ -56,24 +56,11 @@ module "network" {
       name             = "snet-ci-${random_id.suffix.hex}"
       address_prefixes = ["10.1.1.0/24"]
 
-      network_security_group = {
-        id = azurerm_network_security_group.example.id
-      }
+      security_group_id = azurerm_network_security_group.example.id
+      route_table_id    = azurerm_route_table.example.id
+      nat_gateway_id    = azurerm_nat_gateway.example.id
 
-      nat_gateway = {
-        id = azurerm_nat_gateway.example.id
-      }
-
-      route_table = {
-        id = azurerm_route_table.example.id
-      }
-
-      service_endpoints = [
-        "Microsoft.Sql",
-        "Microsoft.KeyVault",
-        "Microsoft.Storage"
-      ]
-
+      service_endpoints           = ["Microsoft.Sql", "Microsoft.KeyVault", "Microsoft.Storage"]
       service_endpoint_policy_ids = [azurerm_subnet_service_endpoint_storage_policy.this.id]
 
       delegations = [

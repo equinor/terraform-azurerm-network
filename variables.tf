@@ -31,17 +31,9 @@ variable "subnets" {
     name             = string
     address_prefixes = list(string)
 
-    network_security_group = optional(object({
-      id = string
-    }))
-
-    nat_gateway = optional(object({
-      id = string
-    }))
-
-    route_table = optional(object({
-      id = string
-    }))
+    security_group_id = optional(string)
+    route_table_id    = optional(string)
+    nat_gateway_id    = optional(string)
 
     service_endpoints                             = optional(list(string), [])
     service_endpoint_policy_ids                   = optional(list(string), null)
