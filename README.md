@@ -1,12 +1,5 @@
 # Terraform module for Azure Network
 
-[![GitHub Release](https://img.shields.io/github/v/release/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/releases/latest)
-[![Terraform Module Downloads](https://img.shields.io/terraform/module/dt/equinor/network/azurerm)](https://registry.terraform.io/modules/equinor/network/azurerm/latest)
-[![GitHub contributors](https://img.shields.io/github/contributors/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/graphs/contributors)
-[![GitHub Issues](https://img.shields.io/github/issues/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/issues)
-[![GitHub Pull requests](https://img.shields.io/github/issues-pr/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/pulls)
-[![GitHub License](https://img.shields.io/github/license/equinor/terraform-azurerm-network)](https://github.com/equinor/terraform-azurerm-network/blob/main/LICENSE)
-
 Terraform module which creates Azure Network resources.
 
 ## Features
