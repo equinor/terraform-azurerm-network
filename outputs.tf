@@ -14,17 +14,13 @@ output "address_spaces" {
 }
 
 output "subnet_ids" {
-  description = "A map of subnet IDs."
-  value = {
-    for k, v in azurerm_subnet.this : k => v.id
-  }
+  description = "A list of subnet IDs."
+  value       = [for subnet in azurerm_virtual_network.this.subnet[*] : subnet.id]
 }
 
 output "subnet_names" {
-  description = "A map of subnet names."
-  value = {
-    for k, v in azurerm_subnet.this : k => v.name
-  }
+  description = "A list of subnet names."
+  value       = [for subnet in azurerm_virtual_network.this.subnet[*] : subnet.name]
 }
 
 output "virtual_network_peering_names" {

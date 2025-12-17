@@ -11,6 +11,7 @@ Terraform module which creates Azure Network resources.
 
 - Creates a virtual network in the specified resource group.
 - Creates specified subnets.
+- Automatically calculates subnet address prefixes.
 - Creates specified virtual network peerings.
 
 ## Prerequisites
@@ -31,14 +32,14 @@ module "network" {
   vnet_name           = "example-vnet"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-  address_spaces      = ["10.0.0.0/16"]
+  address_space       = "10.0.0.0/16"
 
-  subnets = {
-    "vm" = {
-      name             = "example-vm-snet"
-      address_prefixes = ["10.0.1.0/24"]
+  subnets = [
+    {
+      name     = "example-vm-snet"
+      new_bits = 8
     }
-  }
+  ]
 }
 
 resource "azurerm_resource_group" "example" {

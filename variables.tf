@@ -13,9 +13,9 @@ variable "location" {
   type        = string
 }
 
-variable "address_spaces" {
-  description = "A list of address spaces to use for this virtual network."
-  type        = list(string)
+variable "address_space" {
+  description = "The address space to use for this virtual network."
+  type        = string
 }
 
 variable "dns_servers" {
@@ -25,24 +25,15 @@ variable "dns_servers" {
 }
 
 variable "subnets" {
-  description = "A map of subnets to create for this virtual network."
+  description = "A list of subnets to create for this virtual network."
 
-  type = map(object({
-    name             = string
-    address_prefixes = list(string)
+  type = list(object({
+    name          = string
+    new_bits      = number
+    address_space = optional(number, 0) # index of address space
 
-    network_security_group = optional(object({
-      id = string
-    }))
-
-    nat_gateway = optional(object({
-      id = string
-    }))
-
-    route_table = optional(object({
-      id = string
-    }))
-
+    security_group_id                             = optional(string)
+    route_table_id                                = optional(string)
     service_endpoints                             = optional(list(string), [])
     service_endpoint_policy_ids                   = optional(list(string), null)
     private_endpoint_network_policies             = optional(string, "Disabled")
@@ -55,7 +46,7 @@ variable "subnets" {
     })), [])
   }))
 
-  default = {}
+  default = []
 
   validation {
     condition = alltrue([
