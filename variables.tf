@@ -13,9 +13,9 @@ variable "location" {
   type        = string
 }
 
-variable "address_space" {
-  description = "The address space to use for this virtual network."
-  type        = string
+variable "address_spaces" {
+  description = "A list of address spaces to use for this virtual network."
+  type        = list(string)
 }
 
 variable "dns_servers" {
