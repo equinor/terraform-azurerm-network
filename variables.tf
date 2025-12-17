@@ -28,9 +28,8 @@ variable "subnets" {
   description = "A list of subnets to create for this virtual network."
 
   type = list(object({
-    name          = string
-    new_bits      = number
-    address_space = optional(number, 0) # index of address space
+    name     = string
+    new_bits = number
 
     security_group_id                             = optional(string)
     route_table_id                                = optional(string)
