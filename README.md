@@ -32,12 +32,29 @@ module "network" {
   vnet_name           = "example-vnet"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-  address_spaces      = ["10.0.0.0/16"]
 
-  subnets = [
+  address_spaces = [
     {
-      name     = "example-vm-snet"
-      new_bits = 8
+      prefix = "10.0.0.0/16"
+      subnets = [
+        {
+          name     = "example-snet-01"
+          new_bits = 8
+        },
+        {
+          name     = "example-snet-02"
+          new_bits = 10
+        }
+      ]
+    },
+    {
+      prefix = "10.1.0.0/16"
+      subnets = [
+        {
+          name     = "example-snet-03"
+          new_bits = 12
+        }
+      ]
     }
   ]
 }
