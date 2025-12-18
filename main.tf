@@ -1,6 +1,9 @@
 locals {
-  # Automaticallt calculate a list of address prefixes
-  address_prefixes = cidrsubnets(var.address_spaces[0], [for subnet in var.subnets : subnet.new_bits]...) # TODO: remove hardcoded address space
+  # A map of key-value pairs, where the key is the address space prefix, and value is a list of subnets in that address space.
+  address_space_subnets = { for address_space in var.address_spaces : address_space.prefix => address_space.subnets }
+
+  # A map of key-value pairs, where the key is the address space prefix, and value is a list of calculated address prefixes for the subnets in that address space.
+  subnet_address_prefixes = { for address_space in var.address_spaces : address_space.prefix => cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : subnet.new_bits]...) }
 }
 
 resource "azurerm_virtual_network" "this" {
@@ -15,7 +18,7 @@ resource "azurerm_virtual_network" "this" {
 
     content {
       name                                          = subnet.value["name"]
-      address_prefixes                              = local.address_prefixes[index(var.subnets, subnet.value)]
+      address_prefixes                              = local.subnet_address_prefixes[subnet.value.prefix][index(local.address_space_subnets[subnet.value.prefix], subnet.value)]
       security_group                                = subnet.value["security_group_id"]
       route_table_id                                = subnet.value["route_table_id"]
       service_endpoints                             = subnet.value["service_endpoints"]
