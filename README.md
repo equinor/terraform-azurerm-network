@@ -62,11 +62,6 @@ resource "azurerm_resource_group" "example" {
   name     = "example-resources"
   location = "westeurope"
 }
-
-output "vm_subnet_id" {
-  description = "The ID of the subnet to deploy virtual machines into."
-  value       = module.network.subnet_ids["vm"]
-}
 ```
 
 ## Contributing
