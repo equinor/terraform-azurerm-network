@@ -28,7 +28,7 @@ module "network" {
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
 
-  address_space = [
+  address_spaces = [
     {
       address_prefix = "10.0.0.0/16"
       subnets = [

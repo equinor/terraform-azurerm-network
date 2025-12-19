@@ -1,19 +1,20 @@
 locals {
   # For each address space, calculate an address prefix for each subnet.
   address_prefixes = [
-    for address_space in var.address_space : cidrsubnets(address_space.address_prefix, address_space.subnets[*].new_bits...)
+    for address_space in var.address_spaces : cidrsubnets(address_space.address_prefix, address_space.subnets[*].new_bits...)
   ]
 
-  # Map calculated address prefixes to each subnets.
+  # Map calculated address prefixes to each subnet.
+  # The Azure provider does not permit overlapping address spaces, so each address prefix can be used as a unique map key.
   subnets = {
-    for subnet in flatten([
-      for address_space_index, address_space in var.address_space : [
+    for i in flatten([
+      for address_space_index, address_space in var.address_spaces : [
         for subnet_index, _ in address_space.subnets : {
           address_space_index = address_space_index
           subnet_index        = subnet_index
         }
       ]
-    ]) : local.address_prefixes[subnet.address_space_index][subnet.subnet_index] => var.address_space[subnet.address_space_index].subnets[subnet.subnet_index]
+    ]) : local.address_prefixes[i.address_space_index][i.subnet_index] => var.address_spaces[i.address_space_index].subnets[i.subnet_index]
   }
 
   subnet_route_table_associations = {
@@ -33,7 +34,7 @@ resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = var.address_space[*].address_prefix
+  address_space       = var.address_spaces[*].address_prefix
   dns_servers         = var.dns_servers
 
   dynamic "ddos_protection_plan" {
