@@ -34,27 +34,13 @@ module "network" {
         {
           name          = "example-app-snet"
           prefix_length = "/26"
-          service_endpoints = [
-            "Microsoft.KeyVault",
-            "Microsoft.Storage"
-          ]
-          delegations = [{
-            service_name = "Microsoft.Web/serverfarms"
-          }]
         },
         {
           name          = "example-func-snet"
           prefix_length = "/22"
-          service_endpoints = [
-            "Microsoft.KeyVault",
-            "Microsoft.Storage"
-          ]
-          delegations = [{
-            service_name = "Microsoft.Web/serverfarms"
-          }]
         }
       ]
-    },
+    }
   ]
 }
 
