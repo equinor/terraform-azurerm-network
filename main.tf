@@ -1,7 +1,11 @@
 locals {
+  prefix_lengths = {
+    for address_space in var.address_spaces : address_space.address_prefix => tonumber(split("/", address_space.address_prefix)[1])
+  }
+
   # For each address space, calculate an address prefix for each subnet.
-  address_prefixes = [
-    for address_space in var.address_spaces : cidrsubnets(address_space.address_prefix, address_space.subnets[*].new_bits...)
+  subnet_address_prefixes = [
+    for address_space in var.address_spaces : cidrsubnets(address_space.address_prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.address_prefix]]...)
   ]
 
   # Map calculated address prefixes to each subnet.
@@ -14,7 +18,7 @@ locals {
           subnet_index        = subnet_index
         }
       ]
-    ]) : local.address_prefixes[i.address_space_index][i.subnet_index] => var.address_spaces[i.address_space_index].subnets[i.subnet_index]
+    ]) : local.subnet_address_prefixes[i.address_space_index][i.subnet_index] => var.address_spaces[i.address_space_index].subnets[i.subnet_index]
   }
 
   subnet_route_table_associations = {

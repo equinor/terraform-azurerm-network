@@ -32,12 +32,8 @@ module "network" {
       address_prefix = "10.0.0.0/16"
       subnets = [
         {
-          name     = "example-snet-01"
-          new_bits = 8
-        },
-        {
-          name     = "example-snet-02"
-          new_bits = 8
+          name          = "example-snet"
+          prefix_length = "/24"
         }
       ]
     },

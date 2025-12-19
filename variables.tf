@@ -19,8 +19,8 @@ variable "address_spaces" {
   type = list(object({
     address_prefix = string
     subnets = list(object({
-      name     = string
-      new_bits = number
+      name          = string
+      prefix_length = string
 
       network_security_group = optional(object({
         id = string
@@ -54,8 +54,8 @@ variable "address_spaces" {
       address_prefix = "10.0.0.0/16"
       subnets = [
         {
-          name     = "default"
-          new_bits = 8
+          name          = "default"
+          prefix_length = "/24"
         }
       ]
     }
