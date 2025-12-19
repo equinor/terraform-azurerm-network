@@ -22,12 +22,23 @@ variable "address_space" {
       name     = string
       new_bits = number
 
-      security_group_id                             = optional(string)
-      route_table_id                                = optional(string)
+      network_security_group = optional(object({
+        id = string
+      }))
+
+      nat_gateway = optional(object({
+        id = string
+      }))
+
+      route_table = optional(object({
+        id = string
+      }))
+
       service_endpoints                             = optional(list(string), [])
       service_endpoint_policy_ids                   = optional(list(string), null)
       private_endpoint_network_policies             = optional(string, "Disabled")
       private_link_service_network_policies_enabled = optional(bool, true)
+
       delegations = optional(list(object({
         service_name    = string
         service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
@@ -49,6 +60,11 @@ variable "address_space" {
       ]
     }
   ]
+
+  validation {
+    condition     = length(flatten(var.address_space[*].subnets)) == length(distinct(flatten(var.address_space[*].subnets[*].name)))
+    error_message = "Each subnet must have a unique name within the virtual network."
+  }
 
   validation {
     condition = alltrue([
