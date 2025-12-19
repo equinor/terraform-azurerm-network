@@ -32,8 +32,26 @@ module "network" {
       address_prefix = "10.0.0.0/16"
       subnets = [
         {
-          name          = "example-snet"
-          prefix_length = "/24"
+          name          = "example-app-snet"
+          prefix_length = "/26"
+          service_endpoints = [
+            "Microsoft.KeyVault",
+            "Microsoft.Storage"
+          ]
+          delegations = [{
+            service_name = "Microsoft.Web/serverfarms"
+          }]
+        },
+        {
+          name          = "example-func-snet"
+          prefix_length = "/22"
+          service_endpoints = [
+            "Microsoft.KeyVault",
+            "Microsoft.Storage"
+          ]
+          delegations = [{
+            service_name = "Microsoft.Web/serverfarms"
+          }]
         }
       ]
     },
