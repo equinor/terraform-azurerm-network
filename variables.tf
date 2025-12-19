@@ -13,8 +13,8 @@ variable "location" {
   type        = string
 }
 
-variable "address_spaces" {
-  description = "A list of address spaces to use for this virtual network. Each address space specifies an address prefix and a list subnets to create in that address space."
+variable "address_space" {
+  description = "The address spaces to use for this virtual network. A list of objects that specify an address prefix and a list subnets to create within that prefix."
 
   type = list(object({
     prefix = string
@@ -62,13 +62,13 @@ variable "address_spaces" {
   ]
 
   validation {
-    condition     = length(flatten(var.address_spaces[*].subnets)) == length(distinct(flatten(var.address_spaces[*].subnets[*].name)))
+    condition     = length(flatten(var.address_space[*].subnets)) == length(distinct(flatten(var.address_space[*].subnets[*].name)))
     error_message = "Each subnet must have a unique name within the virtual network."
   }
 
   validation {
     condition = alltrue([
-      for subnet in flatten(var.address_spaces[*].subnets) : contains(["Disabled", "Enabled", "NetworkSecurityGroupEnabled", "RouteTableEnabled"], subnet.private_endpoint_network_policies)
+      for subnet in flatten(var.address_space[*].subnets) : contains(["Disabled", "Enabled", "NetworkSecurityGroupEnabled", "RouteTableEnabled"], subnet.private_endpoint_network_policies)
     ])
     error_message = "The private_endpoint_network_policies attribute must be one of: Disabled, Enabled, NetworkSecurityGroupEnabled or RouteTableEnabled."
   }

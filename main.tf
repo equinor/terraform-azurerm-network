@@ -1,23 +1,23 @@
 locals {
   prefix_lengths = {
-    for address_space in var.address_spaces : address_space.prefix => tonumber(split("/", address_space.prefix)[1])
+    for address_space in var.address_space : address_space.prefix => tonumber(split("/", address_space.prefix)[1])
   }
 
   # For each address space, calculate an address prefix for each subnet.
   subnet_address_prefixes = [
-    for address_space in var.address_spaces : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.prefix]]...)
+    for address_space in var.address_space : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.prefix]]...)
   ]
 
   # A map of subnets, where key is the subnet name, and value is the subnet object with the added calculated addess prefix.
   subnets = {
     for i in flatten([
-      for address_space_index, address_space in var.address_spaces : [
+      for address_space_index, address_space in var.address_space : [
         for subnet_index, _ in address_space.subnets : {
           address_space_index = address_space_index
           subnet_index        = subnet_index
         }
       ]
-    ]) : var.address_spaces[i.address_space_index].subnets[i.subnet_index].name => merge(var.address_spaces[i.address_space_index].subnets[i.subnet_index], { address_prefix = local.subnet_address_prefixes[i.address_space_index][i.subnet_index] })
+    ]) : var.address_space[i.address_space_index].subnets[i.subnet_index].name => merge(var.address_space[i.address_space_index].subnets[i.subnet_index], { address_prefix = local.subnet_address_prefixes[i.address_space_index][i.subnet_index] })
   }
 
   subnet_route_table_associations = {
@@ -37,7 +37,7 @@ resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = var.address_spaces[*].prefix
+  address_space       = var.address_space[*].prefix
   dns_servers         = var.dns_servers
 
   dynamic "ddos_protection_plan" {
