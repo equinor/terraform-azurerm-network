@@ -6,7 +6,7 @@ Terraform module which creates Azure Network resources.
 
 - Creates a virtual network in the specified resource group.
 - Creates specified subnets.
-- Automatically calculates subnet address prefixes using the [built-in `cidrsubnets` function](https://developer.hashicorp.com/terraform/language/functions/cidrsubnets).
+- Automatically calculates subnet address prefixes using the built-in [`cidrsubnets` function](https://developer.hashicorp.com/terraform/language/functions/cidrsubnets).
 - Creates specified virtual network peerings.
 
 ## Prerequisites
