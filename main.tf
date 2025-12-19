@@ -1,15 +1,14 @@
 locals {
   prefix_lengths = {
-    for address_space in var.address_spaces : address_space.address_prefix => tonumber(split("/", address_space.address_prefix)[1])
+    for address_space in var.address_spaces : address_space.prefix => tonumber(split("/", address_space.prefix)[1])
   }
 
   # For each address space, calculate an address prefix for each subnet.
   subnet_address_prefixes = [
-    for address_space in var.address_spaces : cidrsubnets(address_space.address_prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.address_prefix]]...)
+    for address_space in var.address_spaces : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.prefix]]...)
   ]
 
-  # Map calculated address prefixes to each subnet.
-  # The Azure provider does not permit overlapping address spaces, so each address prefix can be used as a unique map key.
+  # A map of subnets, where key is the subnet name, and value is the subnet object with the added calculated addess prefix.
   subnets = {
     for i in flatten([
       for address_space_index, address_space in var.address_spaces : [
@@ -18,7 +17,7 @@ locals {
           subnet_index        = subnet_index
         }
       ]
-    ]) : local.subnet_address_prefixes[i.address_space_index][i.subnet_index] => var.address_spaces[i.address_space_index].subnets[i.subnet_index]
+    ]) : var.address_spaces[i.address_space_index].subnets[i.subnet_index].name => merge(var.address_spaces[i.address_space_index].subnets[i.subnet_index], { address_prefix = local.subnet_address_prefixes[i.address_space_index][i.subnet_index] })
   }
 
   subnet_route_table_associations = {
@@ -38,7 +37,7 @@ resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = var.address_spaces[*].address_prefix
+  address_space       = var.address_spaces[*].prefix
   dns_servers         = var.dns_servers
 
   dynamic "ddos_protection_plan" {
@@ -62,7 +61,7 @@ resource "azurerm_subnet" "this" {
 
   # Multiple prefixes for a subnet are only supported for virtual machines and virtual machine scale sets.
   # Ref: https://learn.microsoft.com/en-us/azure/virtual-network/how-to-multiple-prefixes-subnet
-  address_prefixes = [each.key]
+  address_prefixes = [each.value["address_prefix"]]
 
   service_endpoints                             = each.value["service_endpoints"]
   service_endpoint_policy_ids                   = each.value["service_endpoint_policy_ids"]

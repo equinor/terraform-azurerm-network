@@ -17,7 +17,7 @@ variable "address_spaces" {
   description = "A list of address spaces to use for this virtual network. Each address space specifies an address prefix and a list subnets to create in that address space."
 
   type = list(object({
-    address_prefix = string
+    prefix = string
     subnets = list(object({
       name          = string
       prefix_length = string
@@ -51,7 +51,7 @@ variable "address_spaces" {
 
   default = [
     {
-      address_prefix = "10.0.0.0/16"
+      prefix = "10.0.0.0/16"
       subnets = [
         {
           name          = "default"

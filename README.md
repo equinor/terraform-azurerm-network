@@ -29,7 +29,7 @@ module "network" {
 
   address_spaces = [
     {
-      address_prefix = "10.0.0.0/16"
+      prefix = "10.0.0.0/16"
       subnets = [
         {
           name          = "example-app-snet"
