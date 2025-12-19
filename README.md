@@ -33,9 +33,9 @@ module "network" {
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
 
-  address_spaces = [
+  address_space = [
     {
-      prefix = "10.0.0.0/16"
+      address_prefix = "10.0.0.0/16"
       subnets = [
         {
           name     = "example-snet-01"
@@ -48,7 +48,7 @@ module "network" {
       ]
     },
     {
-      prefix = "10.1.0.0/16"
+      address_prefix = "10.1.0.0/16"
       subnets = [
         {
           name     = "example-snet-03"

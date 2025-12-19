@@ -1,24 +1,44 @@
 locals {
-  # A map of key-value pairs, where the key is the address space prefix, and value is a list of subnets in that address space.
-  address_space_subnets = { for address_space in var.address_spaces : address_space.prefix => address_space.subnets }
+  # Create a flat list of all subnets to create in the virtual network.
+  # For each subnet, calculate the index of its address space and the index of the subnet itself in that address space.
+  # Required to loop through all subnets at once, while maintaining the order of subnets within each address space.
+  subnets = flatten(
+    [
+      for address_space in var.address_space : [
+        for subnet in address_space.subnets : merge(
+          subnet,
+          {
+            address_space_index = index(var.address_space, address_space)
+            subnet_index        = index(address_space.subnets, subnet)
+          }
+        )
+      ]
+    ]
+  )
 
-  # A map of key-value pairs, where the key is the address space prefix, and value is a list of calculated address prefixes for the subnets in that address space.
-  subnet_address_prefixes = { for address_space in var.address_spaces : address_space.prefix => cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : subnet.new_bits]...) }
+  # For each address space, calculate an address prefix for each subnet.
+  address_prefixes = [
+    for address_space in var.address_space : cidrsubnets(address_space.address_prefix, address_space.subnets[*].new_bits...)
+  ]
 }
 
 resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = var.address_spaces
+  address_space       = var.address_space[*].address_prefix
   dns_servers         = var.dns_servers
 
   dynamic "subnet" {
-    for_each = var.subnets
+    for_each = local.subnets
 
     content {
-      name                                          = subnet.value["name"]
-      address_prefixes                              = local.subnet_address_prefixes[subnet.value.prefix][index(local.address_space_subnets[subnet.value.prefix], subnet.value)]
+      name = subnet.value["name"]
+
+      # Multiple prefixes for a subnet are only supported for virtual machines and virtual machine scale sets.
+      # Ref: https://learn.microsoft.com/en-us/azure/virtual-network/how-to-multiple-prefixes-subnet
+      address_prefixes = [local.address_prefixes[subnet.value.address_space_index][subnet.value.subnet_index]]
+
       security_group                                = subnet.value["security_group_id"]
       route_table_id                                = subnet.value["route_table_id"]
       service_endpoints                             = subnet.value["service_endpoints"]
