@@ -32,12 +32,8 @@ module "network" {
       prefix = "10.0.0.0/16"
       subnets = [
         {
-          name          = "example-app-snet"
-          prefix_length = "/26"
-        },
-        {
-          name          = "example-func-snet"
-          prefix_length = "/22"
+          name          = "example-vm-snet"
+          prefix_length = "/24"
         }
       ]
     }
@@ -47,6 +43,11 @@ module "network" {
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
   location = "westeurope"
+}
+
+output "vm_subnet_id" {
+  description = "The ID of the subnet to deploy virtual machines into."
+  value       = module.network.subnet_ids["example-vm-snet"]
 }
 ```
 
