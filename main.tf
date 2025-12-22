@@ -1,11 +1,7 @@
 locals {
-  prefix_lengths = {
-    for address_space in var.address_space : address_space.prefix => tonumber(split("/", address_space.prefix)[1])
-  }
-
   # For each address space, calculate an address prefix for each subnet.
   subnet_address_prefixes = [
-    for address_space in var.address_space : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - local.prefix_lengths[address_space.prefix]]...)
+    for address_space in var.address_space : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - tonumber(split("/", address_space.prefix)[1])]...)
   ]
 
   # A map of subnets, where key is the subnet name, and value is the subnet object with the added calculated addess prefix.
