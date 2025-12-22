@@ -13,56 +13,71 @@ variable "location" {
   type        = string
 }
 
-variable "address_spaces" {
-  description = "A list of address spaces to use for this virtual network."
-  type        = list(string)
+variable "address_space" {
+  description = "The address spaces to use for this virtual network. A list of objects that specify an address prefix and a list subnets to create within that prefix."
+
+  type = list(object({
+    prefix = string
+    subnets = list(object({
+      name          = string
+      prefix_length = string
+
+      network_security_group = optional(object({
+        id = string
+      }))
+
+      nat_gateway = optional(object({
+        id = string
+      }))
+
+      route_table = optional(object({
+        id = string
+      }))
+
+      service_endpoints                             = optional(list(string), [])
+      service_endpoint_policy_ids                   = optional(list(string), null)
+      private_endpoint_network_policies             = optional(string, "Disabled")
+      private_link_service_network_policies_enabled = optional(bool, true)
+
+      delegations = optional(list(object({
+        service_name    = string
+        service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
+        name            = optional(string)
+      })), [])
+    }))
+  }))
+
+  nullable = false
+
+  default = [
+    {
+      prefix = "10.0.0.0/16"
+      subnets = [
+        {
+          name          = "default"
+          prefix_length = "/24"
+        }
+      ]
+    }
+  ]
+
+  validation {
+    condition     = length(flatten(var.address_space[*].subnets)) == length(distinct(flatten(var.address_space[*].subnets[*].name)))
+    error_message = "Each subnet must have a unique name within the virtual network."
+  }
+
+  validation {
+    condition = alltrue([
+      for subnet in flatten(var.address_space[*].subnets) : contains(["Disabled", "Enabled", "NetworkSecurityGroupEnabled", "RouteTableEnabled"], subnet.private_endpoint_network_policies)
+    ])
+    error_message = "The private_endpoint_network_policies attribute must be one of: Disabled, Enabled, NetworkSecurityGroupEnabled or RouteTableEnabled."
+  }
 }
 
 variable "dns_servers" {
   description = "A list of DNS servers to use for this virtual network."
   type        = list(string)
   default     = []
-}
-
-variable "subnets" {
-  description = "A map of subnets to create for this virtual network."
-
-  type = map(object({
-    name             = string
-    address_prefixes = list(string)
-
-    network_security_group = optional(object({
-      id = string
-    }))
-
-    nat_gateway = optional(object({
-      id = string
-    }))
-
-    route_table = optional(object({
-      id = string
-    }))
-
-    service_endpoints                             = optional(list(string), [])
-    service_endpoint_policy_ids                   = optional(list(string), null)
-    private_endpoint_network_policies             = optional(string, "Disabled")
-    private_link_service_network_policies_enabled = optional(bool, true)
-
-    delegations = optional(list(object({
-      service_name    = string
-      service_actions = optional(list(string), ["Microsoft.Network/virtualNetworks/subnets/action"])
-      name            = optional(string)
-    })), [])
-  }))
-
-  default = {}
-
-  validation {
-    condition = alltrue([
-      for subnet in var.subnets : contains(["Disabled", "Enabled", "NetworkSecurityGroupEnabled", "RouteTableEnabled"], subnet.private_endpoint_network_policies)
-    ])
-    error_message = "The private_endpoint_network_policies attribute must be one of: Disabled, Enabled, NetworkSecurityGroupEnabled or RouteTableEnabled."
-  }
 }
 
 variable "virtual_network_peerings" {

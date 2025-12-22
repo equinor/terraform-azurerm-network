@@ -14,16 +14,9 @@ output "address_spaces" {
 }
 
 output "subnet_ids" {
-  description = "A map of subnet IDs."
+  description = "A map from subnet names to subnet IDs."
   value = {
-    for k, v in azurerm_subnet.this : k => v.id
-  }
-}
-
-output "subnet_names" {
-  description = "A map of subnet names."
-  value = {
-    for k, v in azurerm_subnet.this : k => v.name
+    for k, v in azurerm_virtual_network.this.subnet[*] : k => v.id
   }
 }
 

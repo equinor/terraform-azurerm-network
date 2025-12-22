@@ -1,14 +1,31 @@
 locals {
+  # For each address space, calculate an address prefix for each subnet.
+  subnet_address_prefixes = [
+    for address_space in var.address_space : cidrsubnets(address_space.prefix, [for subnet in address_space.subnets : tonumber(split("/", subnet.prefix_length)[1]) - tonumber(split("/", address_space.prefix)[1])]...)
+  ]
+
+  # A map of subnets, where key is the subnet name, and value is the subnet object with the added calculated addess prefix.
+  subnets = {
+    for i in flatten([
+      for address_space_index, address_space in var.address_space : [
+        for subnet_index, _ in address_space.subnets : {
+          address_space_index = address_space_index
+          subnet_index        = subnet_index
+        }
+      ]
+    ]) : var.address_space[i.address_space_index].subnets[i.subnet_index].name => merge(var.address_space[i.address_space_index].subnets[i.subnet_index], { address_prefix = local.subnet_address_prefixes[i.address_space_index][i.subnet_index] })
+  }
+
   subnet_route_table_associations = {
-    for k, v in var.subnets : k => v["route_table"].id if v["route_table"] != null
+    for k, v in local.subnets : k => v["route_table"].id if v["route_table"] != null
   }
 
   subnet_network_security_group_associations = {
-    for k, v in var.subnets : k => v["network_security_group"].id if v["network_security_group"] != null
+    for k, v in local.subnets : k => v["network_security_group"].id if v["network_security_group"] != null
   }
 
   subnet_nat_gateway_associations = {
-    for k, v in var.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
+    for k, v in local.subnets : k => v["nat_gateway"].id if v["nat_gateway"] != null
   }
 }
 
@@ -16,7 +33,7 @@ resource "azurerm_virtual_network" "this" {
   name                = var.vnet_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = var.address_spaces
+  address_space       = var.address_space[*].prefix
   dns_servers         = var.dns_servers
 
   dynamic "ddos_protection_plan" {
@@ -32,12 +49,16 @@ resource "azurerm_virtual_network" "this" {
 }
 
 resource "azurerm_subnet" "this" {
-  for_each = var.subnets
+  for_each = local.subnets
 
-  name                                          = each.value["name"]
-  resource_group_name                           = azurerm_virtual_network.this.resource_group_name
-  virtual_network_name                          = azurerm_virtual_network.this.name
-  address_prefixes                              = each.value["address_prefixes"]
+  name                 = each.value["name"]
+  resource_group_name  = azurerm_virtual_network.this.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
+
+  # Multiple prefixes for a subnet are only supported for virtual machines and virtual machine scale sets.
+  # Ref: https://learn.microsoft.com/en-us/azure/virtual-network/how-to-multiple-prefixes-subnet
+  address_prefixes = [each.value["address_prefix"]]
+
   service_endpoints                             = each.value["service_endpoints"]
   service_endpoint_policy_ids                   = each.value["service_endpoint_policy_ids"]
   private_endpoint_network_policies             = each.value["private_endpoint_network_policies"]
