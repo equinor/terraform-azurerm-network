@@ -17,8 +17,10 @@ module "network" {
 
   subnets = {
     "vm" = {
-      name             = "snet-vm-${random_id.suffix.hex}"
-      address_prefixes = ["10.0.1.0/24"]
+      name                   = "snet-vm-${random_id.suffix.hex}"
+      address_prefixes       = ["10.0.1.0/24"]
+      network_security_group = null
+      nat_gateway            = null
     }
   }
 }

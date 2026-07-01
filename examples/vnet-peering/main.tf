@@ -41,8 +41,10 @@ module "network_spoke" {
 
   subnets = {
     "default" = {
-      name             = "default"
-      address_prefixes = ["10.1.1.0/24"]
+      name                   = "default"
+      address_prefixes       = ["10.1.1.0/24"]
+      network_security_group = null
+      nat_gateway            = null
     }
   }
 
