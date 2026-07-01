@@ -31,13 +31,13 @@ variable "subnets" {
     name             = string
     address_prefixes = list(string)
 
-    network_security_group = optional(object({
+    network_security_group = object({
       id = string
-    }))
+    })
 
-    nat_gateway = optional(object({
+    nat_gateway = object({
       id = string
-    }))
+    })
 
     route_table = optional(object({
       id = string
