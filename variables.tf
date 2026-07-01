@@ -31,10 +31,14 @@ variable "subnets" {
     name             = string
     address_prefixes = list(string)
 
+    # Azure Advisor recommends associating an NSG with subnets to increase
+    # security.
     network_security_group = object({
       id = string
     })
 
+    # Azure Advisor recommends associating a NAT gateway with subnets to
+    # increase reliability.
     nat_gateway = object({
       id = string
     })
