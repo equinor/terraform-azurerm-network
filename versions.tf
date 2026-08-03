@@ -3,8 +3,9 @@ terraform {
 
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 4.0.0"
+      source = "hashicorp/azurerm"
+      # Version 5.0.0 is required to use the "service_endpoint" block for the "azurerm_subnet" resource.
+      version = ">= 5.0.0"
     }
   }
 }
