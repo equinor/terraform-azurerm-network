@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.2](https://github.com/equinor/terraform-azurerm-network/compare/v3.2.1...v3.2.2) (2026-08-04)
+
+
+### Code Refactoring
+
+* make changes according to Azure provider 5.0 upgrade guide ([#84](https://github.com/equinor/terraform-azurerm-network/issues/84)) ([392a1fb](https://github.com/equinor/terraform-azurerm-network/commit/392a1fb608f936eb2709dd08a8c998308b5b9e4d))
+
 ## [3.2.1](https://github.com/equinor/terraform-azurerm-network/compare/v3.2.0...v3.2.1) (2025-04-28)
 
 
