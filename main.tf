@@ -46,7 +46,7 @@ resource "azurerm_subnet" "this" {
     for_each = each.value["service_endpoints"]
 
     content {
-      service = service_endpoint
+      service = service_endpoint.value
     }
   }
 
