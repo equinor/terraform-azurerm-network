@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.3](https://github.com/equinor/terraform-azurerm-network/compare/v3.2.2...v3.2.3) (2026-08-25)
+
+
+### Bug Fixes
+
+* set service_endpoint value in dynamic block ([#86](https://github.com/equinor/terraform-azurerm-network/issues/86)) ([e1bc9e8](https://github.com/equinor/terraform-azurerm-network/commit/e1bc9e887d40a690891b110a05fdcf03e0f69b85))
+
 ## [3.2.2](https://github.com/equinor/terraform-azurerm-network/compare/v3.2.1...v3.2.2) (2026-08-04)
 
 
