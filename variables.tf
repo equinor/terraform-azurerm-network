@@ -31,13 +31,17 @@ variable "subnets" {
     name             = string
     address_prefixes = list(string)
 
-    network_security_group = optional(object({
+    # Azure Advisor recommends associating an NSG with subnets to increase
+    # security of inbound and outbound traffic.
+    network_security_group = object({
       id = string
-    }))
+    })
 
-    nat_gateway = optional(object({
+    # Azure Advisor recommends associating a NAT gateway with subnets to
+    # increase reliability of outbound internet traffic.
+    nat_gateway = object({
       id = string
-    }))
+    })
 
     route_table = optional(object({
       id = string
